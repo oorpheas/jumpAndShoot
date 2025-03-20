@@ -15,31 +15,33 @@ public class Bullet : MonoBehaviour
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player");
-        _sRplayer = _player.GetComponent<SpriteRenderer>();
-        if (_sRplayer.flipX)
+        _scriptP = _player.GetComponent<Player>();
+
+        if (_player.playerAxis < 0)
         {
-            _isFlipped = true;
+            _sR.flipX = true;
         }
-        else
+        else if (axisX > 0)
         {
-            _isFlipped = false;
+            _sR.flipX = false;
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        Moviment();
-        if (_isFlipped )
-        {
-            if (transform.position.x < leftLimit)
-                Destroy(gameObject);
-        }
-        else 
-        {
-            if (transform.position.x > rightLimit)
-                Destroy(gameObject);
-        }
+        transform.position += new Vector3(10f, 0, 0);
+        //Moviment();
+        //if (_isFlipped)
+        //{
+        //    if (transform.position.x < leftLimit)
+        //        Destroy(gameObject);
+        //}
+        //else
+        //{
+        //    if (transform.position.x > rightLimit)
+        //        Destroy(gameObject);
+        //}
     }
 
     void Moviment()
@@ -52,5 +54,11 @@ public class Bullet : MonoBehaviour
         {
             transform.position += transform.right * bulletSpeed * Time.deltaTime;
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (!other.gameObject.CompareTag("Player"))
+            Destroy(gameObject);
     }
 }

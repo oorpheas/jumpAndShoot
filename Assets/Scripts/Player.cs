@@ -1,19 +1,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField]
+
     public int speed;
     public float jumpForce;
 
-    [SerializeField]
-    public GameObject bulletPrefab;
+    static public float playerAxis;
 
+    [SerializeField]
+    private GameObject bulletPrefab;
     private float _axisX;
+
     private Rigidbody2D _rb2d;
     private bool _isGrounded;
     private SpriteRenderer _sR;
@@ -51,6 +54,8 @@ public class Player : MonoBehaviour
         {
             _sR.flipX = false;
         }
+
+        playerAxis = _axisX;
     }
 
     void Jump()
@@ -66,7 +71,7 @@ public class Player : MonoBehaviour
     { 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Instantiate(bulletPrefab, transform.position, transform.rotation);
+            Instantiate(bulletPrefab, transform.position + new Vector3(1,1,0), transform.rotation);
         }
     }
 
@@ -84,5 +89,13 @@ public class Player : MonoBehaviour
         {
             _isGrounded = false;
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("enemy"))
+        {
+            Destroy(gameObject);
+        }       
     }
 }

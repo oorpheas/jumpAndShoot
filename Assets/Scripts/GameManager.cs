@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log(_spawns[0]);
+        Debug.Log(_spawns[1]);
 
     }
 
@@ -46,18 +48,13 @@ public class GameManager : MonoBehaviour
             {
                 StartCoroutine(Horde());
                 Debug.Log("Corrotina iniciada");
-            }
-            else
-            {
-                Debug.Log("ainda existe inimigos em cena");
-
-            }
+            }                
         }
     }
 
     void HordeManager (int howMuchZums, bool needRandom)
     {
-        if (!needRandom)
+        if (needRandom)
         {
             if (_hordeCount == 1)
             {
@@ -65,7 +62,6 @@ public class GameManager : MonoBehaviour
                 {
                     SpawnEnemy(0);
                 }
-
             }
             if (_hordeCount == 2)
             {
@@ -73,7 +69,6 @@ public class GameManager : MonoBehaviour
                 {
                     SpawnEnemy(1);
                 }
-
             }
         }
         else 
@@ -89,6 +84,7 @@ public class GameManager : MonoBehaviour
     void SpawnEnemy(int selectSpawn)
     {
         Instantiate(enemy, _spawns[selectSpawn].transform.position, transform.rotation);
+        Debug.Log("inimigo spawnado em:" + selectSpawn);
     }
 
     private bool LookForZombies()
@@ -107,7 +103,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator Horde()
     {
-        _hordeCount = 1;
+        _hordeCount++;
         Debug.Log("O número de horda é:" + _hordeCount);
 
         if (_hordeCount <= 2)
