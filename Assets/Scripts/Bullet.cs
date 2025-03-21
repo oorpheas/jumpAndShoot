@@ -4,44 +4,23 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField]
-    public float bulletSpeed, rightLimit, leftLimit;
+
+    public float bulletSpeed;
 
     private bool _isFlipped;
-
-    private GameObject _player;
-    private SpriteRenderer _sRplayer;
+    private float Timer;
 
     void Start()
     {
-        _player = GameObject.FindGameObjectWithTag("Player");
-        _scriptP = _player.GetComponent<Player>();
-
-        if (_player.playerAxis < 0)
-        {
-            _sR.flipX = true;
-        }
-        else if (axisX > 0)
-        {
-            _sR.flipX = false;
-        }
+        _isFlipped = Player.isFlipped;
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position += new Vector3(10f, 0, 0);
-        //Moviment();
-        //if (_isFlipped)
-        //{
-        //    if (transform.position.x < leftLimit)
-        //        Destroy(gameObject);
-        //}
-        //else
-        //{
-        //    if (transform.position.x > rightLimit)
-        //        Destroy(gameObject);
-        //}
+        Timer += Time.deltaTime;
+        Moviment();
+        DestroyBullet();        
     }
 
     void Moviment()
@@ -53,6 +32,14 @@ public class Bullet : MonoBehaviour
         else
         {
             transform.position += transform.right * bulletSpeed * Time.deltaTime;
+        }
+    }
+
+    void DestroyBullet()
+    {
+        if (Timer > 5)
+        {
+            Destroy(gameObject);
         }
     }
 

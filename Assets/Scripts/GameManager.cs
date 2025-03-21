@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    static public int score;
+
     public float spawnTime;
     public float waitHorde;
     public int zombies;

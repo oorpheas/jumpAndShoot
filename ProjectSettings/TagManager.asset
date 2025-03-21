@@ -8,6 +8,7 @@ TagManager:
   - spawn
   - enemy
   - bullet
+  - window_area
   layers:
   - Default
   - TransparentFX

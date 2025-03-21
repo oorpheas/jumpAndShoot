@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     public int speed;
     public float jumpForce;
 
-    static public float playerAxis;
+    static public bool isFlipped;
 
     [SerializeField]
     private GameObject bulletPrefab;
@@ -21,12 +21,19 @@ public class Player : MonoBehaviour
     private bool _isGrounded;
     private SpriteRenderer _sR;
 
+    private Transform _gunL;
+    private Transform _gunR;
+    private Transform _armaUsada;
+
 
     // Start is called before the first frame update
     void Start()
     {
         _rb2d = GetComponent<Rigidbody2D>();
         _sR = GetComponent<SpriteRenderer>();
+
+        _gunL = GetComponentInChildren<Transform>().Find("gunL");
+        _gunR = GetComponentInChildren<Transform>().Find("gunR");
     }
 
     // Update is called once per frame
@@ -49,13 +56,16 @@ public class Player : MonoBehaviour
         if (_axisX < 0)
         {
             _sR.flipX = true;
+            _armaUsada = _gunL.transform;
+            isFlipped = true;
         }
         else if (_axisX > 0)
         {
             _sR.flipX = false;
+            _armaUsada = _gunR.transform;
+            isFlipped = false;
         }
 
-        playerAxis = _axisX;
     }
 
     void Jump()
@@ -71,7 +81,7 @@ public class Player : MonoBehaviour
     { 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Instantiate(bulletPrefab, transform.position + new Vector3(1,1,0), transform.rotation);
+            Instantiate(bulletPrefab, _armaUsada.transform.position, transform.rotation);
         }
     }
 
