@@ -70,7 +70,7 @@ public class Player : MonoBehaviour
 
     void Jump()
     {
-        if (Input.GetKey(KeyCode.W) && _isGrounded) // qualquer variavel bool é entendida como TRUE dentro de verificações, exceto se for !bool
+        if (Input.GetKey(KeyCode.W) && _isGrounded || Input.GetKey(KeyCode.UpArrow) && _isGrounded) // qualquer variavel bool é entendida como TRUE dentro de verificações, exceto se for !bool
         {
             Vector2 _jump = new Vector2(0f, jumpForce);
             _rb2d.AddForce(_jump, ForceMode2D.Impulse);

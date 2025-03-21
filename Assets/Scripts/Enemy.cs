@@ -29,7 +29,11 @@ public class Enemy : MonoBehaviour
 
     void MoveToPlayer()
     {
-        transform.position = Vector3.MoveTowards(gameObject.transform.position, _player.transform.position, _enemySpeed * Time.deltaTime);
+        if (_player != null)
+        {
+            transform.position = Vector3.MoveTowards(gameObject.transform.position, _player.transform.position, _enemySpeed * Time.deltaTime);
+
+        }
     }
 
 
@@ -68,7 +72,7 @@ public class Enemy : MonoBehaviour
                 _rb2d.AddForce(_jump, ForceMode2D.Impulse);
 
             }
-        }   
+        }
     }
 
 }
