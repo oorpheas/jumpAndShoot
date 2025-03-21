@@ -174,4 +174,4 @@ MonoBehaviour:
   enemySpeedMin: 1
   enemySpeedMax: 5
   jumpForceMin: 2
-  jumpForceMax: 4
+  jumpForceMax: 3

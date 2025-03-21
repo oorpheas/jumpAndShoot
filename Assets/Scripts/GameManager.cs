@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     static public int score;
+
+    public Text scoreTxt;
 
     public float spawnTime;
     public float waitHorde;
@@ -41,6 +44,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime;
+        scoreTxt.text = score.ToString(); // converte em string e mostra na caixa de texto
 
         if (_player != null)
         {
@@ -48,8 +52,8 @@ public class GameManager : MonoBehaviour
 
             if (!_zums)
             {
-                StartCoroutine(Horde());
                 Debug.Log("Corrotina iniciada");
+                StartCoroutine(Horde());
             }                
         }
     }
@@ -60,14 +64,14 @@ public class GameManager : MonoBehaviour
         {
             if (_hordeCount == 1)
             {
-                for (int i = 0; i <=howMuchZums; i++)
+                for (int i = 0; i < howMuchZums; i++)
                 {
                     SpawnEnemy(0);
                 }
             }
             if (_hordeCount == 2)
             {
-                for (int i = 0; i <= howMuchZums; i++)
+                for (int i = 0; i < howMuchZums; i++)
                 {
                     SpawnEnemy(1);
                 }
@@ -75,7 +79,7 @@ public class GameManager : MonoBehaviour
         }
         else 
         {         
-            for (int i = 0; i <= howMuchZums; i++)
+            for (int i = 0; i < howMuchZums; i++)
             {
                 _spawnSelect = Random.Range(0, _spawns.Length);
                 SpawnEnemy(_spawnSelect);
@@ -115,6 +119,7 @@ public class GameManager : MonoBehaviour
         else
         {
             zombies += zombies / 2;
+            Debug.Log(zombies);
             HordeManager(zombies, _random);
         }
 
