@@ -175,3 +175,7 @@ MonoBehaviour:
   enemySpeedMax: 5
   jumpForceMin: 2
   jumpForceMax: 3
+  attackRangeMin: 0
+  attackRangeMax: 3
+  cooldownMin: 3
+  cooldownMax: 8

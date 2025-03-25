@@ -103,7 +103,7 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("enemy"))
+        if (other.gameObject.CompareTag("enemy") && Enemy.isAttacking == true)
         {
             Destroy(gameObject);
         }       

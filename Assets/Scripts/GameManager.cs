@@ -14,7 +14,6 @@ public class GameManager : MonoBehaviour
     public float waitHorde;
     public int zombies;
     public int initialHorde;
-    public float timer;
     public GameObject enemy;
 
     private GameObject[] _spawns;
@@ -25,6 +24,7 @@ public class GameManager : MonoBehaviour
     private bool _random;
     private int _hordeCount = 0;
     private int _spawnSelect;
+    private float _timer, _spawnTimer;
 
     void Awake()
     {
@@ -43,7 +43,9 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timer += Time.deltaTime;
+        _timer += Time.deltaTime;
+        _spawnTimer += Time.deltaTime;  
+
         scoreTxt.text = score.ToString(); // converte em string e mostra na caixa de texto
 
         if (_player != null)
@@ -90,7 +92,6 @@ public class GameManager : MonoBehaviour
     void SpawnEnemy(int selectSpawn)
     {
         Instantiate(enemy, _spawns[selectSpawn].transform.position, transform.rotation);
-        Debug.Log("inimigo spawnado em:" + selectSpawn);
     }
 
     private bool LookForZombies()

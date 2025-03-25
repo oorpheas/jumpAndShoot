@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
 public class Enemy : MonoBehaviour
 {
+    public float enemySpeedMin, enemySpeedMax, jumpForceMin, jumpForceMax, attackRangeMin, attackRangeMax, cooldownMin, cooldownMax;
+    static public bool isAttacking;
+    
     private GameObject _player;
-    public float enemySpeedMin, enemySpeedMax, jumpForceMin, jumpForceMax;
-    private float _enemySpeed, _jumpForce;
+    private float _enemySpeed, _jumpForce, _distance, _attackRange, _cooldown, _timer;
 
     private Rigidbody2D _rb2d;
     private bool _isGrounded;
@@ -19,12 +22,30 @@ public class Enemy : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("Player");
         _enemySpeed = Random.Range(enemySpeedMin, enemySpeedMax);
         _jumpForce = Random.Range(jumpForceMin, jumpForceMax);
+        _attackRange = Random.Range(attackRangeMin, attackRangeMax);
+        _cooldown = Random.Range(cooldownMin, cooldownMax);
+
+        Debug.Log("o range é" + _attackRange);
+        Debug.Log("o cooldown é" + _cooldown);
     }
 
     // Update is called once per frame
     void Update()
     {
+        _timer += Time.deltaTime;
+        Debug.Log("está atacando?" + isAttacking);
+
         MoveToPlayer();
+
+        if (_cooldown < _timer)
+        {
+            Debug.Log("pode atacar!");
+            AttackPlayer();
+            Debug.Log("atacou!");
+        }
+        else
+            Debug.Log("cooldown!");
+
     }
 
     void MoveToPlayer()
@@ -32,8 +53,20 @@ public class Enemy : MonoBehaviour
         if (_player != null)
         {
             transform.position = Vector3.MoveTowards(gameObject.transform.position, _player.transform.position, _enemySpeed * Time.deltaTime);
-
+            _distance = Vector2.Distance(transform.position, _player.transform.position);
         }
+    }
+
+    void AttackPlayer()
+    {      
+        if (_distance >= _attackRange)
+        {
+            isAttacking = true;
+            _timer = 0;
+            Debug.LogWarning ("esta atacando");
+        }
+        else
+            Debug.Log("atacando, porém fora do range");
     }
 
 
@@ -53,6 +86,7 @@ public class Enemy : MonoBehaviour
             _isGrounded = false;
         }
     }
+
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("bullet"))
@@ -74,5 +108,4 @@ public class Enemy : MonoBehaviour
             }
         }
     }
-
 }
