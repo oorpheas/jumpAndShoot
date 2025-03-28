@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-
 public class Enemy : MonoBehaviour
 {
     public float enemySpeedMin, enemySpeedMax, jumpForceMin, jumpForceMax, attackRangeMin, attackRangeMax, cooldownMin, cooldownMax;
+    
+    public SpriteRenderer _renderer;
+    
     static public bool isAttacking;
     
     private GameObject _player;
@@ -15,15 +17,26 @@ public class Enemy : MonoBehaviour
     private Rigidbody2D _rb2d;
     private bool _isGrounded;
 
+    private int _rS;
+
+    [SerializeField]
+    private Color[] shirts;
+
     // Start is called before the first frame update
     void Start()
     {
         _rb2d = GetComponent<Rigidbody2D>();
+
         _player = GameObject.FindGameObjectWithTag("Player");
+
         _enemySpeed = Random.Range(enemySpeedMin, enemySpeedMax);
         _jumpForce = Random.Range(jumpForceMin, jumpForceMax);
         _attackRange = Random.Range(attackRangeMin, attackRangeMax);
         _cooldown = Random.Range(cooldownMin, cooldownMax);
+
+        _rS = Random.Range(0, shirts.Length-1);
+
+        _renderer.color = new Color(shirts[_rS].r, shirts[_rS].g, shirts[_rS].b);
 
         Debug.Log("o range é" + _attackRange);
         Debug.Log("o cooldown é" + _cooldown);
