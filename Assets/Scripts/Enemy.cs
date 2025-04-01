@@ -22,7 +22,6 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private Color[] shirts;
 
-    private Animator _isWalking, _isAttacking, _isDancing;
 
     // Start is called before the first frame update
     void Start()
@@ -69,6 +68,7 @@ public class Enemy : MonoBehaviour
         {
             transform.position = Vector3.MoveTowards(gameObject.transform.position, _player.transform.position, _enemySpeed * Time.deltaTime);
             _distance = Vector2.Distance(transform.position, _player.transform.position);
+
         }
     }
 
