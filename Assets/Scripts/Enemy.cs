@@ -22,6 +22,8 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private Color[] shirts;
 
+    private Animator _isWalking, _isAttacking, _isDancing;
+
     // Start is called before the first frame update
     void Start()
     {
