@@ -7,26 +7,29 @@ public class Enemy : MonoBehaviour
 {
     public float enemySpeedMin, enemySpeedMax, jumpForceMin, jumpForceMax, attackRangeMin, attackRangeMax, cooldownMin, cooldownMax;
     
-    public SpriteRenderer _renderer;
-    
     static public bool isAttacking;
     
     private GameObject _player;
     private float _enemySpeed, _jumpForce, _distance, _attackRange, _cooldown, _timer;
 
     private Rigidbody2D _rb2d;
-    private bool _isGrounded;
+    private Material _material;
 
+    private bool _isGrounded, _isWalking;
     private int _rS;
 
     [SerializeField]
     private Color[] shirts;
+
+    private Animator _animator;
 
 
     // Start is called before the first frame update
     void Start()
     {
         _rb2d = GetComponent<Rigidbody2D>();
+        _material = GetComponent<Material>();
+        _animator = GetComponent<Animator>();
 
         _player = GameObject.FindGameObjectWithTag("Player");
 
@@ -37,7 +40,7 @@ public class Enemy : MonoBehaviour
 
         _rS = Random.Range(0, shirts.Length-1);
 
-        _renderer.color = new Color(shirts[_rS].r, shirts[_rS].g, shirts[_rS].b);
+        _material.color = new Color(shirts[_rS].r, shirts[_rS].g, shirts[_rS].b);
 
         Debug.Log("o range é" + _attackRange);
         Debug.Log("o cooldown é" + _cooldown);
@@ -68,12 +71,15 @@ public class Enemy : MonoBehaviour
         {
             transform.position = Vector3.MoveTowards(gameObject.transform.position, _player.transform.position, _enemySpeed * Time.deltaTime);
             _distance = Vector2.Distance(transform.position, _player.transform.position);
-
+            _animator.SetBool("isWalking", true);
+            _isWalking = true;
         }
     }
 
     void AttackPlayer()
-    {      
+    {
+        _animator.SetBool("isAttacking", true);
+
         if (_distance >= _attackRange)
         {
             isAttacking = true;
