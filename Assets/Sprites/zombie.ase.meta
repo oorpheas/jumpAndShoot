@@ -75,7 +75,7 @@ ScriptedImporter:
     importHiddenLayers: 0
     layerImportMode: 1
     defaultPivotSpace: 0
-    defaultPivotAlignment: 7
+    defaultPivotAlignment: 0
     customPivotPosition: {x: 0.5, y: 0.5}
     mosaicPadding: 4
     spritePadding: 0
@@ -88,7 +88,7 @@ ScriptedImporter:
     importHiddenLayers: 0
     layerImportMode: 1
     defaultPivotSpace: 0
-    defaultPivotAlignment: 7
+    defaultPivotAlignment: 0
     customPivotPosition: {x: 0.5, y: 0.5}
     mosaicPadding: 4
     spritePadding: 0
@@ -97,7 +97,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638790656846850494
+  platformSettingsDirtyTick: 638790718145135016
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -123,7 +123,7 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: zombie
     originalName: 
-    pivot: {x: 0.47222224, y: -0.01724138}
+    pivot: {x: 0.47222224, y: 0.5344828}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -143,7 +143,7 @@ ScriptedImporter:
     uvTransform: {x: 241, y: 196}
   - name: zombie_Frame_1
     originalName: 
-    pivot: {x: 0.44444445, y: -0.016949153}
+    pivot: {x: 0.44444445, y: 0.5254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -163,7 +163,7 @@ ScriptedImporter:
     uvTransform: {x: 107, y: 344}
   - name: zombie_Frame_2
     originalName: 
-    pivot: {x: 0.44444445, y: -0.016666668}
+    pivot: {x: 0.44444445, y: 0.5166667}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -183,7 +183,7 @@ ScriptedImporter:
     uvTransform: {x: 62, y: 138}
   - name: zombie_Frame_3
     originalName: 
-    pivot: {x: 0.43243244, y: -0.016666668}
+    pivot: {x: 0.43243244, y: 0.5166667}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -203,7 +203,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 69}
   - name: zombie_Frame_4
     originalName: 
-    pivot: {x: 0.43243244, y: -0.016949153}
+    pivot: {x: 0.43243244, y: 0.5254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -223,7 +223,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 203}
   - name: zombie_Frame_5
     originalName: 
-    pivot: {x: 0.41666666, y: -0.016949153}
+    pivot: {x: 0.41666666, y: 0.5254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -243,7 +243,7 @@ ScriptedImporter:
     uvTransform: {x: 107, y: 411}
   - name: zombie_Frame_6
     originalName: 
-    pivot: {x: 0.41666666, y: -0.016666668}
+    pivot: {x: 0.41666666, y: 0.5166667}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -263,7 +263,7 @@ ScriptedImporter:
     uvTransform: {x: 62, y: 206}
   - name: zombie_Frame_7
     originalName: 
-    pivot: {x: 0.4, y: -0.016666668}
+    pivot: {x: 0.4, y: 0.5166667}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -283,7 +283,7 @@ ScriptedImporter:
     uvTransform: {x: 241, y: 65}
   - name: zombie_Frame_8
     originalName: 
-    pivot: {x: 0.43243244, y: -0.016949153}
+    pivot: {x: 0.43243244, y: 0.5254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -303,7 +303,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 270}
   - name: zombie_Frame_9
     originalName: 
-    pivot: {x: 0.45714286, y: -0.016949153}
+    pivot: {x: 0.45714286, y: 0.5254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -323,7 +323,7 @@ ScriptedImporter:
     uvTransform: {x: 289, y: 268}
   - name: zombie_Frame_10
     originalName: 
-    pivot: {x: 0.45714286, y: -0.01724138}
+    pivot: {x: 0.45714286, y: 0.5344828}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -343,7 +343,7 @@ ScriptedImporter:
     uvTransform: {x: 333, y: 69}
   - name: zombie_Frame_11
     originalName: 
-    pivot: {x: 0.64, y: -0.01754386}
+    pivot: {x: 0.64, y: 0.54385966}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -363,7 +363,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 4}
   - name: zombie_Frame_12
     originalName: 
-    pivot: {x: 0.4, y: -0.018867925}
+    pivot: {x: 0.4, y: 0.5849057}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -383,7 +383,7 @@ ScriptedImporter:
     uvTransform: {x: 241, y: 4}
   - name: zombie_Frame_13
     originalName: 
-    pivot: {x: 0.37209302, y: -0.025}
+    pivot: {x: 0.37209302, y: 0.77500004}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -403,7 +403,7 @@ ScriptedImporter:
     uvTransform: {x: 422, y: 4}
   - name: zombie_Frame_14
     originalName: 
-    pivot: {x: 0.43243244, y: -0.018181818}
+    pivot: {x: 0.43243244, y: 0.56363636}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -423,7 +423,7 @@ ScriptedImporter:
     uvTransform: {x: 377, y: 4}
   - name: zombie_Frame_15
     originalName: 
-    pivot: {x: 0.45714286, y: -0.016949153}
+    pivot: {x: 0.45714286, y: 0.5254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -443,7 +443,7 @@ ScriptedImporter:
     uvTransform: {x: 289, y: 335}
   - name: zombie_Frame_16
     originalName: 
-    pivot: {x: 0.47222224, y: -0.01724138}
+    pivot: {x: 0.47222224, y: 0.5344828}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -463,7 +463,7 @@ ScriptedImporter:
     uvTransform: {x: 241, y: 262}
   - name: zombie_Frame_17
     originalName: 
-    pivot: {x: 0.47222224, y: -0.01724138}
+    pivot: {x: 0.47222224, y: 0.5344828}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -483,7 +483,7 @@ ScriptedImporter:
     uvTransform: {x: 241, y: 328}
   - name: zombie_Frame_18
     originalName: 
-    pivot: {x: 0.47222224, y: -0.01724138}
+    pivot: {x: 0.47222224, y: 0.5344828}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -503,7 +503,7 @@ ScriptedImporter:
     uvTransform: {x: 241, y: 394}
   - name: zombie_Frame_19
     originalName: 
-    pivot: {x: 0.47222224, y: -0.01724138}
+    pivot: {x: 0.47222224, y: 0.5344828}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -523,7 +523,7 @@ ScriptedImporter:
     uvTransform: {x: 289, y: 4}
   - name: zombie_Frame_20
     originalName: 
-    pivot: {x: 0.5, y: -0.01724138}
+    pivot: {x: 0.5, y: 0.5344828}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -543,7 +543,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 137}
   - name: zombie_Frame_21
     originalName: 
-    pivot: {x: 0.5, y: -0.017857144}
+    pivot: {x: 0.5, y: 0.55357146}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -563,7 +563,7 @@ ScriptedImporter:
     uvTransform: {x: 151, y: 4}
   - name: zombie_Frame_22
     originalName: 
-    pivot: {x: 0.5, y: -0.017857144}
+    pivot: {x: 0.5, y: 0.55357146}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -583,7 +583,7 @@ ScriptedImporter:
     uvTransform: {x: 151, y: 68}
   - name: zombie_Frame_23
     originalName: 
-    pivot: {x: 0.5, y: -0.018181818}
+    pivot: {x: 0.5, y: 0.56363636}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -603,7 +603,7 @@ ScriptedImporter:
     uvTransform: {x: 241, y: 133}
   - name: zombie_Frame_24
     originalName: 
-    pivot: {x: 0.47222224, y: -0.018181818}
+    pivot: {x: 0.47222224, y: 0.56363636}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -623,7 +623,7 @@ ScriptedImporter:
     uvTransform: {x: 333, y: 265}
   - name: zombie_Frame_25
     originalName: 
-    pivot: {x: 0.47222224, y: -0.017857144}
+    pivot: {x: 0.47222224, y: 0.55357146}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -643,7 +643,7 @@ ScriptedImporter:
     uvTransform: {x: 333, y: 201}
   - name: zombie_Frame_26
     originalName: 
-    pivot: {x: 0.47222224, y: -0.01724138}
+    pivot: {x: 0.47222224, y: 0.5344828}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -663,7 +663,7 @@ ScriptedImporter:
     uvTransform: {x: 289, y: 70}
   - name: zombie_Frame_27
     originalName: 
-    pivot: {x: 0.47222224, y: -0.01724138}
+    pivot: {x: 0.47222224, y: 0.5344828}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -683,7 +683,7 @@ ScriptedImporter:
     uvTransform: {x: 289, y: 136}
   - name: zombie_Frame_28
     originalName: 
-    pivot: {x: 0.47222224, y: -0.01724138}
+    pivot: {x: 0.47222224, y: 0.5344828}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -703,7 +703,7 @@ ScriptedImporter:
     uvTransform: {x: 289, y: 202}
   - name: zombie_Frame_29
     originalName: 
-    pivot: {x: 0.47222224, y: -0.01754386}
+    pivot: {x: 0.47222224, y: 0.54385966}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -723,7 +723,7 @@ ScriptedImporter:
     uvTransform: {x: 289, y: 402}
   - name: zombie_Frame_30
     originalName: 
-    pivot: {x: 0.47222224, y: -0.01754386}
+    pivot: {x: 0.47222224, y: 0.54385966}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -743,7 +743,7 @@ ScriptedImporter:
     uvTransform: {x: 333, y: 4}
   - name: zombie_Frame_31
     originalName: 
-    pivot: {x: 0.45714286, y: -0.01724138}
+    pivot: {x: 0.45714286, y: 0.5344828}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -763,7 +763,7 @@ ScriptedImporter:
     uvTransform: {x: 333, y: 135}
   - name: zombie_Frame_32
     originalName: 
-    pivot: {x: 0.44444445, y: -0.016949153}
+    pivot: {x: 0.44444445, y: 0.5254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -783,7 +783,7 @@ ScriptedImporter:
     uvTransform: {x: 151, y: 132}
   - name: zombie_Frame_33
     originalName: 
-    pivot: {x: 0.44444445, y: -0.016666668}
+    pivot: {x: 0.44444445, y: 0.5166667}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -803,7 +803,7 @@ ScriptedImporter:
     uvTransform: {x: 62, y: 274}
   - name: zombie_Frame_34
     originalName: 
-    pivot: {x: 0.44444445, y: -0.016949153}
+    pivot: {x: 0.44444445, y: 0.5254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -823,7 +823,7 @@ ScriptedImporter:
     uvTransform: {x: 151, y: 199}
   - name: zombie_Frame_35
     originalName: 
-    pivot: {x: 0.44444445, y: -0.016666668}
+    pivot: {x: 0.44444445, y: 0.5166667}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -843,7 +843,7 @@ ScriptedImporter:
     uvTransform: {x: 62, y: 342}
   - name: zombie_Frame_36
     originalName: 
-    pivot: {x: 0.41666666, y: -0.016949153}
+    pivot: {x: 0.41666666, y: 0.5254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -863,7 +863,7 @@ ScriptedImporter:
     uvTransform: {x: 151, y: 266}
   - name: zombie_Frame_37
     originalName: 
-    pivot: {x: 0.41666666, y: -0.016666668}
+    pivot: {x: 0.41666666, y: 0.5166667}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -883,7 +883,7 @@ ScriptedImporter:
     uvTransform: {x: 62, y: 410}
   - name: zombie_Frame_38
     originalName: 
-    pivot: {x: 0.41666666, y: -0.016949153}
+    pivot: {x: 0.41666666, y: 0.5254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -903,7 +903,7 @@ ScriptedImporter:
     uvTransform: {x: 151, y: 333}
   - name: zombie_Frame_39
     originalName: 
-    pivot: {x: 0.41666666, y: -0.016666668}
+    pivot: {x: 0.41666666, y: 0.5166667}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -923,7 +923,7 @@ ScriptedImporter:
     uvTransform: {x: 107, y: 4}
   - name: zombie_Frame_40
     originalName: 
-    pivot: {x: 0.5555556, y: -0.016949153}
+    pivot: {x: 0.5555556, y: 0.5254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -943,7 +943,7 @@ ScriptedImporter:
     uvTransform: {x: 151, y: 400}
   - name: zombie_Frame_41
     originalName: 
-    pivot: {x: 0.5555556, y: -0.016666668}
+    pivot: {x: 0.5555556, y: 0.5166667}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -963,7 +963,7 @@ ScriptedImporter:
     uvTransform: {x: 107, y: 72}
   - name: zombie_Frame_42
     originalName: 
-    pivot: {x: 0.5555556, y: -0.016949153}
+    pivot: {x: 0.5555556, y: 0.5254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -983,7 +983,7 @@ ScriptedImporter:
     uvTransform: {x: 197, y: 4}
   - name: zombie_Frame_43
     originalName: 
-    pivot: {x: 0.5555556, y: -0.016666668}
+    pivot: {x: 0.5555556, y: 0.5166667}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1003,7 +1003,7 @@ ScriptedImporter:
     uvTransform: {x: 107, y: 140}
   - name: zombie_Frame_44
     originalName: 
-    pivot: {x: 0.5833333, y: -0.016949153}
+    pivot: {x: 0.5833333, y: 0.5254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1023,7 +1023,7 @@ ScriptedImporter:
     uvTransform: {x: 197, y: 71}
   - name: zombie_Frame_45
     originalName: 
-    pivot: {x: 0.5833333, y: -0.016666668}
+    pivot: {x: 0.5833333, y: 0.5166667}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1043,7 +1043,7 @@ ScriptedImporter:
     uvTransform: {x: 107, y: 208}
   - name: zombie_Frame_46
     originalName: 
-    pivot: {x: 0.5833333, y: -0.016949153}
+    pivot: {x: 0.5833333, y: 0.5254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1063,7 +1063,7 @@ ScriptedImporter:
     uvTransform: {x: 197, y: 138}
   - name: zombie_Frame_47
     originalName: 
-    pivot: {x: 0.5833333, y: -0.016666668}
+    pivot: {x: 0.5833333, y: 0.5166667}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1083,7 +1083,7 @@ ScriptedImporter:
     uvTransform: {x: 107, y: 276}
   - name: zombie_Frame_48
     originalName: 
-    pivot: {x: 0.43243244, y: -0.016949153}
+    pivot: {x: 0.43243244, y: 0.5254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1103,7 +1103,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 337}
   - name: zombie_Frame_49
     originalName: 
-    pivot: {x: 0.41666666, y: -0.016949153}
+    pivot: {x: 0.41666666, y: 0.5254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1123,7 +1123,7 @@ ScriptedImporter:
     uvTransform: {x: 197, y: 205}
   - name: zombie_Frame_50
     originalName: 
-    pivot: {x: 0.43243244, y: -0.016949153}
+    pivot: {x: 0.43243244, y: 0.5254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1143,7 +1143,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 404}
   - name: zombie_Frame_51
     originalName: 
-    pivot: {x: 0.41666666, y: -0.016949153}
+    pivot: {x: 0.41666666, y: 0.5254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1163,7 +1163,7 @@ ScriptedImporter:
     uvTransform: {x: 197, y: 272}
   - name: zombie_Frame_52
     originalName: 
-    pivot: {x: 0.5675676, y: -0.016949153}
+    pivot: {x: 0.5675676, y: 0.5254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1183,7 +1183,7 @@ ScriptedImporter:
     uvTransform: {x: 62, y: 4}
   - name: zombie_Frame_53
     originalName: 
-    pivot: {x: 0.5833333, y: -0.016949153}
+    pivot: {x: 0.5833333, y: 0.5254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1203,7 +1203,7 @@ ScriptedImporter:
     uvTransform: {x: 197, y: 339}
   - name: zombie_Frame_54
     originalName: 
-    pivot: {x: 0.5675676, y: -0.016949153}
+    pivot: {x: 0.5675676, y: 0.5254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1223,7 +1223,7 @@ ScriptedImporter:
     uvTransform: {x: 62, y: 71}
   - name: zombie_Frame_55
     originalName: 
-    pivot: {x: 0.5833333, y: -0.016949153}
+    pivot: {x: 0.5833333, y: 0.5254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
