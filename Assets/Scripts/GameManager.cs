@@ -35,8 +35,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log(_spawns[0]);
-        Debug.Log(_spawns[1]);
+        //Debug.Log(_spawns[0]);
+        //Debug.Log(_spawns[1]);
 
     }
 
@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
 
             if (!_zums)
             {
-                Debug.Log("Corrotina iniciada");
+                //Debug.Log("Corrotina iniciada");
                 StartCoroutine(Horde());
             }                
         }
@@ -120,7 +120,7 @@ public class GameManager : MonoBehaviour
         else
         {
             zombies += zombies / 2;
-            Debug.Log(zombies);
+            //Debug.Log(zombies);
             HordeManager(zombies, _random);
         }
 

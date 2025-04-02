@@ -25,12 +25,16 @@ public class Player : MonoBehaviour
     private Transform _gunR;
     private Transform _armaUsada;
 
+    private GameObject _spawn;
 
     // Start is called before the first frame update
     void Start()
     {
         _rb2d = GetComponent<Rigidbody2D>();
         _sR = GetComponent<SpriteRenderer>();
+        _spawn = GameObject.FindGameObjectWithTag("playerSpawn");
+
+        gameObject.transform.position = _spawn.transform.position;
 
         _gunL = GetComponentInChildren<Transform>().Find("gunL");
         _gunR = GetComponentInChildren<Transform>().Find("gunR");
@@ -103,7 +107,7 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("enemy") && Enemy.isAttacking == true)
+        if (other.gameObject.CompareTag("enemy"))
         {
             Destroy(gameObject);
         }       
