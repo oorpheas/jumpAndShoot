@@ -9,14 +9,14 @@ public class Enemy : MonoBehaviour
 	
 	static public bool isAttacking;
 	
-	private GameObject _player;
+	private GameObject[] _player;
 	private float _enemySpeed, _jumpForce, _distance, _attackRange, _cooldown, _timer;
 
 	private Rigidbody2D _rb2d;
 	private SpriteRenderer _self;
 
 	private bool _isGrounded, _isWalking;
-	private int _rS;
+	private int _rS, _choosePlayer;
 
 	[SerializeField]
 	private Color[] shirts;
@@ -33,9 +33,10 @@ public class Enemy : MonoBehaviour
 		_self = GetComponent<SpriteRenderer>();
 		_animator = GetComponent<Animator>();
 
-		_player = GameObject.FindGameObjectWithTag("Player");
+		_player = GameObject.FindGameObjectsWithTag("Player");
+        _choosePlayer = Random.Range(0, _player.Length);
 
-		_enemySpeed = Random.Range(enemySpeedMin, enemySpeedMax);
+        _enemySpeed = Random.Range(enemySpeedMin, enemySpeedMax);
 		_jumpForce = Random.Range(jumpForceMin, jumpForceMax);
 		_attackRange = Random.Range(attackRangeMin, attackRangeMax);
 		_cooldown = Random.Range(cooldownMin, cooldownMax);
@@ -56,7 +57,7 @@ public class Enemy : MonoBehaviour
 		_timer += Time.deltaTime;
 		//Debug.Log("está atacando?" + isAttacking);
 
-		if (_player != null)
+		if (_player[_choosePlayer] != null)
 		{
             MoveToPlayer();
             CorrectAxis();
@@ -81,14 +82,14 @@ public class Enemy : MonoBehaviour
 
 	void MoveToPlayer()
 	{
-		transform.position = Vector3.MoveTowards(gameObject.transform.position, _player.transform.position, _enemySpeed * Time.deltaTime);
-		_distance = Vector2.Distance(transform.position, _player.transform.position);
+		transform.position = Vector3.MoveTowards(gameObject.transform.position, _player[_choosePlayer].transform.position, _enemySpeed * Time.deltaTime);
+		_distance = Vector2.Distance(transform.position, _player[_choosePlayer].transform.position);
 		_isWalking = true;
 	}
 
 	void CorrectAxis()
 	{
-		if ((_player.transform.position.x - _self.transform.position.x < _self.transform.position.x))
+		if ((_player[_choosePlayer].transform.position.x - _self.transform.position.x < _self.transform.position.x))
 		{
 			_self.flipX = true;
 		}

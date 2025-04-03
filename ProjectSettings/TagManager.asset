@@ -10,6 +10,7 @@ TagManager:
   - bullet
   - window_area
   - playerSpawn
+  - playerSpawn2
   layers:
   - Default
   - TransparentFX

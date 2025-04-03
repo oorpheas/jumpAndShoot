@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
 
     public int speed;
     public float jumpForce;
+    public int playerID;
 
     static public bool isFlipped;
 
@@ -30,14 +31,28 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (playerID == 1)
+        {
+            _spawn = GameObject.FindGameObjectWithTag("playerSpawn");
+
+            gameObject.transform.position = _spawn.transform.position;
+        }
+        else if (playerID == 2)
+        {
+            _spawn = GameObject.FindGameObjectWithTag("playerSpawn2");
+
+            gameObject.transform.position = _spawn.transform.position;
+        }
+        else
+        {
+            Debug.LogWarning("não tem controles associados a esse ID");
+        }
         _rb2d = GetComponent<Rigidbody2D>();
         _sR = GetComponent<SpriteRenderer>();
-        _spawn = GameObject.FindGameObjectWithTag("playerSpawn");
-
-        gameObject.transform.position = _spawn.transform.position;
 
         _gunL = GetComponentInChildren<Transform>().Find("gunL");
         _gunR = GetComponentInChildren<Transform>().Find("gunR");
+
     }
 
     // Update is called once per frame
@@ -54,7 +69,19 @@ public class Player : MonoBehaviour
 
     void Moviment()
     {
-        _axisX = Input.GetAxis("Horizontal");
+        if (playerID == 1)
+        {
+            _axisX = Input.GetAxis("Horizontal-P1");
+        }
+        else if (playerID == 2)
+        {
+            _axisX = Input.GetAxis("Horizontal-P2");
+        }
+        else
+        {
+            Debug.LogWarning("não tem controles associados a esse ID");
+        }
+
         _rb2d.velocity = new Vector2 (_axisX * speed, _rb2d.velocity.y); // em Y ele está recebendo a velocidade atribuida (ou seja, gravidade);
 
         if (_axisX < 0)
@@ -74,18 +101,47 @@ public class Player : MonoBehaviour
 
     void Jump()
     {
-        if (Input.GetKey(KeyCode.W) && _isGrounded || Input.GetKey(KeyCode.UpArrow) && _isGrounded) // qualquer variavel bool é entendida como TRUE dentro de verificações, exceto se for !bool
+        if (playerID == 1)
         {
-            Vector2 _jump = new Vector2(0f, jumpForce);
-            _rb2d.AddForce(_jump, ForceMode2D.Impulse);
+            if (Input.GetKey(KeyCode.W) && _isGrounded) // qualquer variavel bool é entendida como TRUE dentro de verificações, exceto se for !bool
+            {
+                Vector2 _jump = new Vector2(0f, jumpForce);
+                _rb2d.AddForce(_jump, ForceMode2D.Impulse);
+            }
+        }
+        else if (playerID == 2)
+        {
+            if (Input.GetKey(KeyCode.UpArrow) && _isGrounded) // qualquer variavel bool é entendida como TRUE dentro de verificações, exceto se for !bool
+            {
+                Vector2 _jump = new Vector2(0f, jumpForce);
+                _rb2d.AddForce(_jump, ForceMode2D.Impulse);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("não tem controles associados a esse ID");
         }
     }
 
     void Shoot()
-    { 
-        if (Input.GetKeyDown(KeyCode.Space))
+    {
+        if (playerID == 1)
         {
-            Instantiate(bulletPrefab, _armaUsada.transform.position, transform.rotation);
+            if (Input.GetKeyDown(KeyCode.LeftControl))
+            {
+                Instantiate(bulletPrefab, _armaUsada.transform.position, transform.rotation);
+            }
+        }
+        else if (playerID == 2)
+        {
+            if (Input.GetKeyDown(KeyCode.RightControl))
+            {
+                Instantiate(bulletPrefab, _armaUsada.transform.position, transform.rotation);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("não tem controles associados a esse ID");
         }
     }
 
