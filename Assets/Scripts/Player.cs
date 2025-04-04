@@ -10,9 +10,10 @@ public class Player : MonoBehaviour
 
     public int speed;
     public float jumpForce;
+    
     public int playerID;
-
-    static public bool isFlipped;
+    static public int ID;
+    static public bool[] isFlipped;
 
     [SerializeField]
     private GameObject bulletPrefab;
@@ -31,6 +32,8 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ID = playerID;
+
         if (playerID == 1)
         {
             _spawn = GameObject.FindGameObjectWithTag("playerSpawn");
@@ -47,6 +50,7 @@ public class Player : MonoBehaviour
         {
             Debug.LogWarning("não tem controles associados a esse ID");
         }
+
         _rb2d = GetComponent<Rigidbody2D>();
         _sR = GetComponent<SpriteRenderer>();
 
@@ -59,7 +63,7 @@ public class Player : MonoBehaviour
     void FixedUpdate()
     {
         Jump();
-        Moviment();
+        SetMoviment();
     }
 
     private void Update()
@@ -67,36 +71,40 @@ public class Player : MonoBehaviour
         Shoot();   
     }
 
-    void Moviment()
+    void SetMoviment()
     {
         if (playerID == 1)
         {
             _axisX = Input.GetAxis("Horizontal-P1");
+            Moviment(_axisX, playerID);
         }
         else if (playerID == 2)
         {
             _axisX = Input.GetAxis("Horizontal-P2");
+            Moviment(_axisX, playerID);
         }
         else
         {
             Debug.LogWarning("não tem controles associados a esse ID");
         }
+    }
 
-        _rb2d.velocity = new Vector2 (_axisX * speed, _rb2d.velocity.y); // em Y ele está recebendo a velocidade atribuida (ou seja, gravidade);
+    void Moviment(float axis, int ID)
+    {
+        _rb2d.velocity = new Vector2(axis * speed, _rb2d.velocity.y); // em Y ele está recebendo a velocidade atribuida (ou seja, gravidade);
 
-        if (_axisX < 0)
+        if (axis < 0)
         {
             _sR.flipX = true;
             _armaUsada = _gunL.transform;
-            isFlipped = true;
+            isFlipped[ID] = true;
         }
-        else if (_axisX > 0)
+        else if (axis > 0)
         {
             _sR.flipX = false;
             _armaUsada = _gunR.transform;
-            isFlipped = false;
+            isFlipped[ID] = false;
         }
-
     }
 
     void Jump()
