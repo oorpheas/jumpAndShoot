@@ -12,7 +12,7 @@ public class Bullet : MonoBehaviour
 
     void Start()
     {
-        _isFlipped = Player.isFlipped[Player.ID];
+        _isFlipped = Player.isFlipped;
     }
 
     // Update is called once per frame

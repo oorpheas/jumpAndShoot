@@ -9,41 +9,51 @@ public class Player : MonoBehaviour
 {
 
     public int speed;
-    public float jumpForce;
-    
     public int playerID;
-    static public int ID;
-    static public bool[] isFlipped;
+
+    public float jumpForce;  
+
+    static public int pID;
+    static public bool isFlipped;
+    static public bool isFlipped2;
 
     [SerializeField]
-    private GameObject bulletPrefab;
     private float _axisX;
+    private GameObject bulletPrefab;
+    
+    private bool _isGrounded;
 
     private Rigidbody2D _rb2d;
-    private bool _isGrounded;
+
     private SpriteRenderer _sR;
+    private SpriteRenderer _knife;
 
     private Transform _gunL;
     private Transform _gunR;
     private Transform _armaUsada;
+
+    private Animation _anim;
 
     private GameObject _spawn;
 
     // Start is called before the first frame update
     void Start()
     {
-        ID = playerID;
+        pID = playerID;
 
         if (playerID == 1)
         {
             _spawn = GameObject.FindGameObjectWithTag("playerSpawn");
-
             gameObject.transform.position = _spawn.transform.position;
+            _gunL = GetComponentInChildren<Transform>().Find("gunL");
+            _gunR = GetComponentInChildren<Transform>().Find("gunR");
         }
         else if (playerID == 2)
         {
             _spawn = GameObject.FindGameObjectWithTag("playerSpawn2");
+            _knife = GetComponentInChildren<SpriteRenderer>();
 
+            _anim = gameObject.GetComponent<Animation>();
             gameObject.transform.position = _spawn.transform.position;
         }
         else
@@ -53,9 +63,6 @@ public class Player : MonoBehaviour
 
         _rb2d = GetComponent<Rigidbody2D>();
         _sR = GetComponent<SpriteRenderer>();
-
-        _gunL = GetComponentInChildren<Transform>().Find("gunL");
-        _gunR = GetComponentInChildren<Transform>().Find("gunR");
 
     }
 
@@ -96,15 +103,32 @@ public class Player : MonoBehaviour
         if (axis < 0)
         {
             _sR.flipX = true;
-            _armaUsada = _gunL.transform;
-            isFlipped[ID] = true;
+
+            if (playerID == 1)
+            {
+                _armaUsada = _gunL.transform;
+                isFlipped = true;
+            }
+            else if (playerID == 2)
+            {
+                isFlipped2 = true;
+            }
         }
         else if (axis > 0)
         {
             _sR.flipX = false;
-            _armaUsada = _gunR.transform;
-            isFlipped[ID] = false;
+
+            if (playerID == 1)
+            {
+                _armaUsada = _gunR.transform;
+                isFlipped = false;
+            }
+            else if (playerID == 2)
+            {
+                isFlipped2 = false;
+            }
         }
+
     }
 
     void Jump()
@@ -142,9 +166,12 @@ public class Player : MonoBehaviour
         }
         else if (playerID == 2)
         {
-            if (Input.GetKeyDown(KeyCode.RightControl))
-            {
-                Instantiate(bulletPrefab, _armaUsada.transform.position, transform.rotation);
+            if (!_anim.isPlaying) 
+            { 
+                if (Input.GetKeyUp(KeyCode.RightControl))
+                {
+                    _anim.Play("attack");
+                }
             }
         }
         else

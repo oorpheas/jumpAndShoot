@@ -11,6 +11,7 @@ TagManager:
   - window_area
   - playerSpawn
   - playerSpawn2
+  - knife
   layers:
   - Default
   - TransparentFX

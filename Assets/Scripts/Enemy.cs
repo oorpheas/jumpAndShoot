@@ -128,7 +128,7 @@ public class Enemy : MonoBehaviour
 
 	private void OnCollisionEnter2D(Collision2D other)
 	{
-		if (other.gameObject.CompareTag("bullet"))
+		if (other.gameObject.CompareTag("bullet") || other.gameObject.CompareTag("knife"))
 		{
 			GameManager.score++;
 			Destroy(gameObject);
