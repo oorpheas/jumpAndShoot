@@ -26,7 +26,6 @@ public class Player : MonoBehaviour
     private Rigidbody2D _rb2d;
 
     private SpriteRenderer _sR;
-    private SpriteRenderer _knife;
 
     private Transform _gunL;
     private Transform _gunR;
@@ -51,7 +50,6 @@ public class Player : MonoBehaviour
         else if (playerID == 2)
         {
             _spawn = GameObject.FindGameObjectWithTag("playerSpawn2");
-            _knife = GetComponentInChildren<SpriteRenderer>();
 
             _anim = gameObject.GetComponent<Animation>();
             gameObject.transform.position = _spawn.transform.position;
@@ -76,6 +74,18 @@ public class Player : MonoBehaviour
     private void Update()
     {
         Shoot();   
+    }
+
+    void SetFlip()
+    {
+        if (playerID == 1)
+        {
+            isFlipped = _sR.flipX;
+        }
+        else if (playerID == 2)
+        {
+            isFlipped2 = _sR.flipX;
+        }
     }
 
     void SetMoviment()
@@ -107,11 +117,7 @@ public class Player : MonoBehaviour
             if (playerID == 1)
             {
                 _armaUsada = _gunL.transform;
-                isFlipped = true;
-            }
-            else if (playerID == 2)
-            {
-                isFlipped2 = true;
+
             }
         }
         else if (axis > 0)
@@ -121,14 +127,10 @@ public class Player : MonoBehaviour
             if (playerID == 1)
             {
                 _armaUsada = _gunR.transform;
-                isFlipped = false;
-            }
-            else if (playerID == 2)
-            {
-                isFlipped2 = false;
             }
         }
 
+        SetFlip();
     }
 
     void Jump()

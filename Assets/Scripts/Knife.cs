@@ -19,13 +19,23 @@ public class Knife : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
+        SetFlip();
+    }
 
-        if (!_anim.isPlaying)
+    void SetFlip()
+    {
+        if (Player.isFlipped2)
         {
-            _isFlipped = Player.isFlipped2;
-            _sR.flipX = _isFlipped;
+            Quaternion _flipAnim = transform.localRotation;
+            _flipAnim.x *= -1;
+            Vector2 _flipAxis = transform.localPosition;
+            _flipAxis.x *= -1;
+            transform.localRotation = _flipAnim;
+            transform.localPosition = _flipAxis;
+
+            Debug.Log(Player.isFlipped2);
         }
     }
 }
