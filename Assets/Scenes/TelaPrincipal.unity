@@ -419,7 +419,7 @@ MonoBehaviour:
   speed: 10
   playerID: 1
   jumpForce: 5
-  _axisX: 0
+  bulletPrefab: {fileID: 3203417203334106508, guid: 424fee4b78d95a9429bf527bb227078a, type: 3}
 --- !u!50 &158015539
 Rigidbody2D:
   serializedVersion: 4
@@ -3036,7 +3036,7 @@ GameObject:
   - component: {fileID: 1823774016}
   - component: {fileID: 1823774021}
   m_Layer: 0
-  m_Name: Player  2
+  m_Name: Player 2
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3102,7 +3102,7 @@ MonoBehaviour:
   speed: 10
   playerID: 2
   jumpForce: 5
-  _axisX: 0
+  bulletPrefab: {fileID: 3203417203334106508, guid: 424fee4b78d95a9429bf527bb227078a, type: 3}
 --- !u!50 &1823774018
 Rigidbody2D:
   serializedVersion: 4

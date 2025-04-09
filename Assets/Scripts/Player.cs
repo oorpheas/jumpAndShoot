@@ -18,8 +18,9 @@ public class Player : MonoBehaviour
     static public bool isFlipped2;
 
     [SerializeField]
-    private float _axisX;
     private GameObject bulletPrefab;
+
+    private float _axisX;
     
     private bool _isGrounded;
 
@@ -168,8 +169,30 @@ public class Player : MonoBehaviour
         }
         else if (playerID == 2)
         {
-            if (!_anim.isPlaying) 
-            { 
+            if (Input.GetKeyUp(KeyCode.RightControl))
+            {
+                Instantiate(bulletPrefab, _armaUsada.transform.position, transform.rotation);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("não tem controles associados a esse ID");
+        }
+    }
+
+    void Knife()
+    {
+        if (playerID == 1)
+        {
+            if (Input.GetKeyDown(KeyCode.LeftControl))
+            {
+                SetShoot(_armaUsada, isFlipped);
+            }
+        }
+        else if (playerID == 2)
+        {
+            if (!_anim.isPlaying)
+            {
                 if (Input.GetKeyUp(KeyCode.RightControl))
                 {
                     _anim.Play("attack");
@@ -180,6 +203,19 @@ public class Player : MonoBehaviour
         {
             Debug.LogWarning("não tem controles associados a esse ID");
         }
+    }
+
+    void SetShoot(Transform _pos, bool _flip)
+    {
+        if (!_flip)
+        {
+            Instantiate(bulletPrefab, _pos.transform.position, transform.rotation);
+        }
+        else
+        {
+            Instantiate(bulletPrefab, _pos.transform.position, new Quaternion(0, -180, 0, 0));
+        }
+        
     }
 
     private void OnCollisionStay2D(Collision2D other)

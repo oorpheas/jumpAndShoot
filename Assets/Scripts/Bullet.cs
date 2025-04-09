@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-
+    private GameObject _reference;
     public float bulletSpeed;
 
     private bool _isFlipped;
@@ -12,6 +12,8 @@ public class Bullet : MonoBehaviour
 
     void Start()
     {
+
+
         _isFlipped = Player.isFlipped;
     }
 
@@ -27,7 +29,7 @@ public class Bullet : MonoBehaviour
     {
         if (_isFlipped)
         {
-            transform.position += -transform.right * bulletSpeed * Time.deltaTime;
+            transform.position += transform.right * bulletSpeed * Time.deltaTime;
         }
         else
         {
