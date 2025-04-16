@@ -4,17 +4,12 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private GameObject _reference;
     public float bulletSpeed;
-
-    private bool _isFlipped;
     private float Timer;
 
     void Start()
     {
-
-
-        _isFlipped = Player.isFlipped;
+        
     }
 
     // Update is called once per frame
@@ -27,14 +22,7 @@ public class Bullet : MonoBehaviour
 
     void Moviment()
     {
-        if (_isFlipped)
-        {
-            transform.position += transform.right * bulletSpeed * Time.deltaTime;
-        }
-        else
-        {
-            transform.position += transform.right * bulletSpeed * Time.deltaTime;
-        }
+        transform.position += transform.right * bulletSpeed * Time.deltaTime;
     }
 
     void DestroyBullet()

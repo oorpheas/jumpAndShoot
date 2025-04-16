@@ -32,7 +32,7 @@ public class Player : MonoBehaviour
     private Transform _gunR;
     private Transform _armaUsada;
 
-    private Animation _anim;
+    private Animator _animator;
 
     private GameObject _spawn;
 
@@ -41,6 +41,8 @@ public class Player : MonoBehaviour
     {
         pID = playerID;
 
+        _animator = GetComponent<Animator>();
+        
         if (playerID == 1)
         {
             _spawn = GameObject.FindGameObjectWithTag("playerSpawn");
@@ -52,7 +54,7 @@ public class Player : MonoBehaviour
         {
             _spawn = GameObject.FindGameObjectWithTag("playerSpawn2");
 
-            _anim = gameObject.GetComponent<Animation>();
+            //_anim = gameObject.GetComponent<Animation>();
             gameObject.transform.position = _spawn.transform.position;
         }
         else
@@ -79,14 +81,16 @@ public class Player : MonoBehaviour
 
     void SetFlip()
     {
-        if (playerID == 1)
-        {
-            isFlipped = _sR.flipX;
-        }
-        else if (playerID == 2)
-        {
-            isFlipped2 = _sR.flipX;
-        }
+        _animator.SetFloat("axisX", _axisX);
+
+        //if (playerID == 1)
+        //{
+        //    isFlipped = _sR.flipX;
+        //}
+        //else if (playerID == 2)
+        //{
+        //    isFlipped2 = _sR.flipX;
+        //}
     }
 
     void SetMoviment()
@@ -94,12 +98,14 @@ public class Player : MonoBehaviour
         if (playerID == 1)
         {
             _axisX = Input.GetAxis("Horizontal-P1");
-            Moviment(_axisX, playerID);
+            Moviment(_axisX);
+            _animator.SetBool("isWalking", true);
         }
         else if (playerID == 2)
         {
             _axisX = Input.GetAxis("Horizontal-P2");
-            Moviment(_axisX, playerID);
+            Moviment(_axisX);
+            _animator.SetBool("isWalking", true);
         }
         else
         {
@@ -107,28 +113,19 @@ public class Player : MonoBehaviour
         }
     }
 
-    void Moviment(float axis, int ID)
+    void Moviment(float axis)
     {
         _rb2d.velocity = new Vector2(axis * speed, _rb2d.velocity.y); // em Y ele está recebendo a velocidade atribuida (ou seja, gravidade);
 
         if (axis < 0)
         {
-            _sR.flipX = true;
-
-            if (playerID == 1)
-            {
-                _armaUsada = _gunL.transform;
-
-            }
+            _armaUsada = _gunL.transform;
+            isFlipped = true;
         }
         else if (axis > 0)
         {
-            _sR.flipX = false;
-
-            if (playerID == 1)
-            {
-                _armaUsada = _gunR.transform;
-            }
+            _armaUsada = _gunR.transform;
+            isFlipped = false;
         }
 
         SetFlip();
@@ -164,14 +161,14 @@ public class Player : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.LeftControl))
             {
-                Instantiate(bulletPrefab, _armaUsada.transform.position, transform.rotation);
+                SetShoot(_armaUsada, isFlipped);
             }
         }
         else if (playerID == 2)
         {
             if (Input.GetKeyUp(KeyCode.RightControl))
             {
-                Instantiate(bulletPrefab, _armaUsada.transform.position, transform.rotation);
+                SetShoot(_armaUsada, isFlipped);
             }
         }
         else
@@ -180,30 +177,30 @@ public class Player : MonoBehaviour
         }
     }
 
-    void Knife()
-    {
-        if (playerID == 1)
-        {
-            if (Input.GetKeyDown(KeyCode.LeftControl))
-            {
-                SetShoot(_armaUsada, isFlipped);
-            }
-        }
-        else if (playerID == 2)
-        {
-            if (!_anim.isPlaying)
-            {
-                if (Input.GetKeyUp(KeyCode.RightControl))
-                {
-                    _anim.Play("attack");
-                }
-            }
-        }
-        else
-        {
-            Debug.LogWarning("não tem controles associados a esse ID");
-        }
-    }
+    //void Knife()
+    //{
+    //    if (playerID == 1)
+    //    {
+    //        if (Input.GetKeyDown(KeyCode.LeftControl))
+    //        {
+    //            SetShoot(_armaUsada, isFlipped);
+    //        }
+    //    }
+    //    else if (playerID == 2)
+    //    {
+    //        if (!_anim.isPlaying)
+    //        {
+    //            if (Input.GetKeyUp(KeyCode.RightControl))
+    //            {
+    //                _anim.Play("attack");
+    //            }
+    //        }
+    //    }
+    //    else
+    //    {
+    //        Debug.LogWarning("não tem controles associados a esse ID");
+    //    }
+    //}
 
     void SetShoot(Transform _pos, bool _flip)
     {
@@ -215,7 +212,10 @@ public class Player : MonoBehaviour
         {
             Instantiate(bulletPrefab, _pos.transform.position, new Quaternion(0, -180, 0, 0));
         }
-        
+
+        _animator.SetBool("isShooting", true);
+                
+
     }
 
     private void OnCollisionStay2D(Collision2D other)

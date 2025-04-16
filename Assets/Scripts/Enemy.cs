@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour
 	private Rigidbody2D _rb2d;
 	private SpriteRenderer _self;
 
-	private bool _isGrounded, _isWalking;
+	private bool _isGrounded;
 	private int _rS, _choosePlayer;
 
 	[SerializeField]
@@ -33,8 +33,7 @@ public class Enemy : MonoBehaviour
 		_self = GetComponent<SpriteRenderer>();
 		_animator = GetComponent<Animator>();
 
-		_player = GameObject.FindGameObjectsWithTag("Player");
-        _choosePlayer = Random.Range(0, _player.Length);
+        FindPlayer();
 
         _enemySpeed = Random.Range(enemySpeedMin, enemySpeedMax);
 		_jumpForce = Random.Range(jumpForceMin, jumpForceMax);
@@ -62,29 +61,30 @@ public class Enemy : MonoBehaviour
             MoveToPlayer();
             CorrectAxis();
 
-			if (_isWalking)
-			{
-				_animator.SetBool("isWalking", true);
-			} 
-			else
-			{
-                _animator.SetBool("isWalking", false);
-            }
-
 		}
 		else
 		{
-            _animator.SetBool("isWalking", false);
-			_animator.SetBool("isDancing", true);
+			FindPlayer();
+            if (_player[_choosePlayer] == null)
+			{
+                _animator.SetBool("isWalking", false);
+                _animator.SetBool("isDancing", true);
+            }
 		}
 
 	}
+
+	void FindPlayer()
+	{
+        _player = GameObject.FindGameObjectsWithTag("Player");
+        _choosePlayer = Random.Range(0, _player.Length);
+    }
 
 	void MoveToPlayer()
 	{
 		transform.position = Vector3.MoveTowards(gameObject.transform.position, _player[_choosePlayer].transform.position, _enemySpeed * Time.deltaTime);
 		_distance = Vector2.Distance(transform.position, _player[_choosePlayer].transform.position);
-		_isWalking = true;
+        _animator.SetBool("isWalking", true);
 	}
 
 	void CorrectAxis()
