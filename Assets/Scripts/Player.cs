@@ -36,26 +36,29 @@ public class Player : MonoBehaviour
 
     private GameObject _spawn;
 
+    private string _animName;
+
     // Start is called before the first frame update
     void Start()
     {
         pID = playerID;
 
         _animator = GetComponent<Animator>();
+
+        _gunL = GetComponentInChildren<Transform>().Find("gunL");
+        _gunR = GetComponentInChildren<Transform>().Find("gunR");
         
         if (playerID == 1)
         {
             _spawn = GameObject.FindGameObjectWithTag("playerSpawn");
             gameObject.transform.position = _spawn.transform.position;
-            _gunL = GetComponentInChildren<Transform>().Find("gunL");
-            _gunR = GetComponentInChildren<Transform>().Find("gunR");
         }
         else if (playerID == 2)
         {
             _spawn = GameObject.FindGameObjectWithTag("playerSpawn2");
+            gameObject.transform.position = _spawn.transform.position;
 
             //_anim = gameObject.GetComponent<Animation>();
-            gameObject.transform.position = _spawn.transform.position;
         }
         else
         {
@@ -99,13 +102,11 @@ public class Player : MonoBehaviour
         {
             _axisX = Input.GetAxis("Horizontal-P1");
             Moviment(_axisX);
-            _animator.SetBool("isWalking", true);
         }
         else if (playerID == 2)
         {
             _axisX = Input.GetAxis("Horizontal-P2");
             Moviment(_axisX);
-            _animator.SetBool("isWalking", true);
         }
         else
         {
@@ -116,6 +117,15 @@ public class Player : MonoBehaviour
     void Moviment(float axis)
     {
         _rb2d.velocity = new Vector2(axis * speed, _rb2d.velocity.y); // em Y ele está recebendo a velocidade atribuida (ou seja, gravidade);
+
+        if (axis != 0)
+        {
+            _animator.SetBool("isWalking", true);
+        }
+        else
+        {
+            _animator.SetBool("isWalking", false);
+        }
 
         if (axis < 0)
         {
@@ -207,15 +217,29 @@ public class Player : MonoBehaviour
         if (!_flip)
         {
             Instantiate(bulletPrefab, _pos.transform.position, transform.rotation);
+            _animName = "shooting";
         }
         else
         {
             Instantiate(bulletPrefab, _pos.transform.position, new Quaternion(0, -180, 0, 0));
+            _animName = "shooting e";
         }
 
-        _animator.SetBool("isShooting", true);
-                
+        StartCoroutine(Anim("isShooting", _animName));
 
+    }
+    IEnumerator Anim(string boolName, string animName)
+    {
+        _animator.SetBool(boolName, true);
+
+        yield return null;
+
+        while (_animator.GetCurrentAnimatorStateInfo(0).IsName(animName) && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+        {
+            yield return null;
+        }
+
+        _animator.SetBool(boolName, false);
     }
 
     private void OnCollisionStay2D(Collision2D other)
@@ -241,4 +265,5 @@ public class Player : MonoBehaviour
             Destroy(gameObject);
         }       
     }
+
 }
