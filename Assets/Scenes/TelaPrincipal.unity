@@ -2227,7 +2227,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   playerID: 1
-  jumpForce: 5
+  jumpForce: 3
   bulletPrefab: {fileID: 3203417203334106508, guid: 424fee4b78d95a9429bf527bb227078a, type: 3}
 --- !u!70 &1325398409
 CapsuleCollider2D:

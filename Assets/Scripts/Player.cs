@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
 
     private float _axisX;
     
-    private bool _isGrounded;
+    private bool _isGrounded, _isWalking;
 
     private Rigidbody2D _rb2d;
 
@@ -84,16 +84,7 @@ public class Player : MonoBehaviour
 
     void SetFlip()
     {
-        _animator.SetFloat("axisX", _axisX);
-
-        //if (playerID == 1)
-        //{
-        //    isFlipped = _sR.flipX;
-        //}
-        //else if (playerID == 2)
-        //{
-        //    isFlipped2 = _sR.flipX;
-        //}
+        _animator.SetBool("isFlipped", isFlipped);
     }
 
     void SetMoviment()
@@ -112,19 +103,23 @@ public class Player : MonoBehaviour
         {
             Debug.LogWarning("não tem controles associados a esse ID");
         }
+
+        _animator.SetBool("isWalking", _isWalking);
+        _animator.SetBool("isIdle", !_isWalking);
+        Debug.LogWarning("player está: \n idle = " + _animator.GetBool("isIdle") + " || andando = " + _animator.GetBool("isWalking") + " || tá virado? " + _animator.GetBool("isFlipped"));
     }
 
     void Moviment(float axis)
     {
         _rb2d.velocity = new Vector2(axis * speed, _rb2d.velocity.y); // em Y ele está recebendo a velocidade atribuida (ou seja, gravidade);
 
-        if (axis != 0)
+        if (_rb2d.velocity.x == 0f)
         {
-            _animator.SetBool("isWalking", true);
+            _isWalking = false;
         }
         else
         {
-            _animator.SetBool("isWalking", false);
+            _isWalking = true;
         }
 
         if (axis < 0)
@@ -217,12 +212,12 @@ public class Player : MonoBehaviour
         if (!_flip)
         {
             Instantiate(bulletPrefab, _pos.transform.position, transform.rotation);
-            _animName = "shooting";
+            _animName = "Shooting";
         }
         else
         {
             Instantiate(bulletPrefab, _pos.transform.position, new Quaternion(0, -180, 0, 0));
-            _animName = "shooting e";
+            _animName = "Shooting e";
         }
 
         StartCoroutine(Anim("isShooting", _animName));
@@ -230,16 +225,22 @@ public class Player : MonoBehaviour
     }
     IEnumerator Anim(string boolName, string animName)
     {
+        Debug.Log("entrou");
         _animator.SetBool(boolName, true);
 
         yield return null;
 
         while (_animator.GetCurrentAnimatorStateInfo(0).IsName(animName) && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
         {
+            Debug.Log("esperou");
             yield return null;
         }
 
         _animator.SetBool(boolName, false);
+
+        Debug.Log("saiu");
+
+        yield break;
     }
 
     private void OnCollisionStay2D(Collision2D other)
