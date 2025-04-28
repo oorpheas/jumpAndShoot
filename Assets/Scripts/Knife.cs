@@ -26,8 +26,7 @@ public class Knife : MonoBehaviour
 
     void SetFlip()
     {
-        if (Player.isFlipped2)
-        {
+        if (Player.isFlipped) {
             Quaternion _flipAnim = transform.localRotation;
             _flipAnim.x *= -1;
             Vector2 _flipAxis = transform.localPosition;
@@ -35,7 +34,7 @@ public class Knife : MonoBehaviour
             transform.localRotation = _flipAnim;
             transform.localPosition = _flipAxis;
 
-            Debug.Log(Player.isFlipped2);
+            Debug.Log(Player.isFlipped);
         }
     }
 }

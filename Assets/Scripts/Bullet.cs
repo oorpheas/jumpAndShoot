@@ -5,19 +5,19 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public float bulletSpeed;
-    private float Timer;
+    private float _timer;
 
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        Timer += Time.deltaTime;
+        _timer += Time.deltaTime;
         Moviment();
-        DestroyBullet();        
+        DestroyBullet();
     }
 
     void Moviment()
@@ -27,8 +27,7 @@ public class Bullet : MonoBehaviour
 
     void DestroyBullet()
     {
-        if (Timer > 5)
-        {
+        if (_timer > 3) {
             Destroy(gameObject);
         }
     }

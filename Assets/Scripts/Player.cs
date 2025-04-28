@@ -7,30 +7,29 @@ using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
-
-    public int speed;
-    public int playerID;
-
-    public float jumpForce;  
-
     static public int pID;
     static public bool isFlipped;
-    static public bool isFlipped2;
+
+    public int playerID;
+
+    public float jumpForce;
 
     [SerializeField]
     private GameObject bulletPrefab;
 
-    private float _axisX;
-    
+    [SerializeField]
+    private int _speed, _ammoCapacity;
+    private int[] _ammo = new int[1];
+
+    private float _axisX, _timer;
+
     private bool _isGrounded, _isWalking;
 
     private Rigidbody2D _rb2d;
 
     private SpriteRenderer _sR;
 
-    private Transform _gunL;
-    private Transform _gunR;
-    private Transform _armaUsada;
+    private Transform _gunL, _gunR, _armaUsada;
 
     private Animator _animator;
 
@@ -41,32 +40,31 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // define ID publico
         pID = playerID;
+        _ammo[0] = _ammoCapacity;
+        //_ammo[1] = _ammoCapacity;
 
         _animator = GetComponent<Animator>();
+        _rb2d = GetComponent<Rigidbody2D>();
+        _sR = GetComponent<SpriteRenderer>();
 
         _gunL = GetComponentInChildren<Transform>().Find("gunL");
         _gunR = GetComponentInChildren<Transform>().Find("gunR");
-        
-        if (playerID == 1)
-        {
+        _armaUsada = _gunR.transform;
+
+        if (playerID == 1) {
             _spawn = GameObject.FindGameObjectWithTag("playerSpawn");
             gameObject.transform.position = _spawn.transform.position;
-        }
-        else if (playerID == 2)
-        {
+        } else if (playerID == 2) {
             _spawn = GameObject.FindGameObjectWithTag("playerSpawn2");
             gameObject.transform.position = _spawn.transform.position;
 
             //_anim = gameObject.GetComponent<Animation>();
-        }
-        else
-        {
+        } else {
             Debug.LogWarning("não tem controles associados a esse ID");
         }
 
-        _rb2d = GetComponent<Rigidbody2D>();
-        _sR = GetComponent<SpriteRenderer>();
 
     }
 
@@ -77,9 +75,9 @@ public class Player : MonoBehaviour
         SetMoviment();
     }
 
-    private void Update()
+    void Update()
     {
-        Shoot();   
+        Shoot();
     }
 
     void SetFlip()
@@ -89,46 +87,33 @@ public class Player : MonoBehaviour
 
     void SetMoviment()
     {
-        if (playerID == 1)
-        {
+        if (playerID == 1) {
             _axisX = Input.GetAxis("Horizontal-P1");
             Moviment(_axisX);
-        }
-        else if (playerID == 2)
-        {
+        } else if (playerID == 2) {
             _axisX = Input.GetAxis("Horizontal-P2");
             Moviment(_axisX);
-        }
-        else
-        {
+        } else {
             Debug.LogWarning("não tem controles associados a esse ID");
         }
 
         _animator.SetBool("isWalking", _isWalking);
         _animator.SetBool("isIdle", !_isWalking);
-        Debug.LogWarning("player está: \n idle = " + _animator.GetBool("isIdle") + " || andando = " + _animator.GetBool("isWalking") + " || tá virado? " + _animator.GetBool("isFlipped"));
+        Debug.LogWarning("player está: \n " +
+            "idle = " + _animator.GetBool("isIdle") +
+            " || andando = " + _animator.GetBool("isWalking") +
+            " || tá virado? " + _animator.GetBool("isFlipped"));
     }
 
     void Moviment(float axis)
     {
-        _rb2d.velocity = new Vector2(axis * speed, _rb2d.velocity.y); // em Y ele está recebendo a velocidade atribuida (ou seja, gravidade);
+        _rb2d.velocity = new Vector2(axis * _speed, _rb2d.velocity.y); // em Y ele está recebendo a velocidade atribuida (ou seja, gravidade);_isWalking = (_rb2d.velocity.x != 0f); 
+        _isWalking = (_rb2d.velocity.x != 0);
 
-        if (_rb2d.velocity.x == 0f)
-        {
-            _isWalking = false;
-        }
-        else
-        {
-            _isWalking = true;
-        }
-
-        if (axis < 0)
-        {
+        if (axis < 0) {
             _armaUsada = _gunL.transform;
             isFlipped = true;
-        }
-        else if (axis > 0)
-        {
+        } else if (axis > 0) {
             _armaUsada = _gunR.transform;
             isFlipped = false;
         }
@@ -138,48 +123,50 @@ public class Player : MonoBehaviour
 
     void Jump()
     {
-        if (playerID == 1)
-        {
+        if (playerID == 1) {
             if (Input.GetKey(KeyCode.W) && _isGrounded) // qualquer variavel bool é entendida como TRUE dentro de verificações, exceto se for !bool
             {
                 Vector2 _jump = new Vector2(0f, jumpForce);
                 _rb2d.AddForce(_jump, ForceMode2D.Impulse);
             }
-        }
-        else if (playerID == 2)
-        {
+        } else if (playerID == 2) {
             if (Input.GetKey(KeyCode.UpArrow) && _isGrounded) // qualquer variavel bool é entendida como TRUE dentro de verificações, exceto se for !bool
             {
                 Vector2 _jump = new Vector2(0f, jumpForce);
                 _rb2d.AddForce(_jump, ForceMode2D.Impulse);
             }
-        }
-        else
-        {
+        } else {
             Debug.LogWarning("não tem controles associados a esse ID");
         }
     }
 
     void Shoot()
     {
-        if (playerID == 1)
-        {
-            if (Input.GetKeyDown(KeyCode.LeftControl))
-            {
+        if (playerID == 1) {
+            if ((_ammo[0] > 0) && Input.GetKeyDown(KeyCode.LeftControl)) {
+                SetShoot(_armaUsada, isFlipped);
+                --_ammo[0];
+                Debug.Log(_ammo[0]);
+            } else if (Input.GetKey(KeyCode.R)) {
+                StartCoroutine(Reload());
+            }
+        } else if (playerID == 2) {
+            if (Input.GetKeyUp(KeyCode.RightControl)) {
                 SetShoot(_armaUsada, isFlipped);
             }
-        }
-        else if (playerID == 2)
-        {
-            if (Input.GetKeyUp(KeyCode.RightControl))
-            {
-                SetShoot(_armaUsada, isFlipped);
-            }
-        }
-        else
-        {
+        } else {
             Debug.LogWarning("não tem controles associados a esse ID");
         }
+    }
+    IEnumerator Reload()
+    {
+        for (int i = 0; i <= _ammoCapacity; i++) {
+            _ammo[0] = i;
+            yield return new WaitForSeconds(0.5f);
+            Debug.Log(_ammo[0]);
+        }
+
+        yield break;
     }
 
     //void Knife()
@@ -209,20 +196,17 @@ public class Player : MonoBehaviour
 
     void SetShoot(Transform _pos, bool _flip)
     {
-        if (!_flip)
-        {
-            Instantiate(bulletPrefab, _pos.transform.position, transform.rotation);
+        if (!_flip) {
             _animName = "Shooting";
-        }
-        else
-        {
-            Instantiate(bulletPrefab, _pos.transform.position, new Quaternion(0, -180, 0, 0));
+            StartCoroutine(Anim("isShooting", _animName));
+            Instantiate(bulletPrefab, _pos.transform.position, transform.rotation);
+        } else {
             _animName = "Shooting e";
+            StartCoroutine(Anim("isShooting", _animName));
+            Instantiate(bulletPrefab, _pos.transform.position, new Quaternion(0, -180, 0, 0));
         }
-
-        StartCoroutine(Anim("isShooting", _animName));
-
     }
+
     IEnumerator Anim(string boolName, string animName)
     {
         Debug.Log("entrou");
@@ -230,8 +214,8 @@ public class Player : MonoBehaviour
 
         yield return null;
 
-        while (_animator.GetCurrentAnimatorStateInfo(0).IsName(animName) && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
-        {
+        while (_animator.GetCurrentAnimatorStateInfo(0).IsName(animName) &&
+            _animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f) {
             Debug.Log("esperou");
             yield return null;
         }
@@ -245,26 +229,22 @@ public class Player : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("ground"))
-        {
+        if (other.gameObject.CompareTag("ground")) {
             _isGrounded = true;
         }
     }
 
     private void OnCollisionExit2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("ground"))
-        {
+        if (other.gameObject.CompareTag("ground")) {
             _isGrounded = false;
         }
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("enemy"))
-        {
+        if (other.gameObject.CompareTag("enemy")) {
             Destroy(gameObject);
-        }       
+        }
     }
-
 }
