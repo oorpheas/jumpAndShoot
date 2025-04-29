@@ -21,18 +21,20 @@ public class Player : MonoBehaviour
     [Header("Especificações")]
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private int _speed, _ammoCapacity;
-    public float jumpForce, playerID;
+    [SerializeField] private float jumpForce;
 
     private int _ammo;
     private float _axisX, _timer;
     private string _animName;
-    private bool _isGrounded, _isWalking;
+    private bool _isGrounded, _isWalking, _isReloading;
 
     public static bool isFlipped;
+    public static string ammo;
 
     private Rigidbody2D _rb2d;
     private Transform _gunL, _gunR, _armaUsada;
     private Animator _animator;
+    private Animation _anim;
     private GameObject _spawn;
 
     [Header("Defina as Teclas")]
@@ -45,21 +47,16 @@ public class Player : MonoBehaviour
 
     void Awake()
     {
-        bool playerOne = (Jogador.PlayerOne == 0) ? true : false;
+        _ammo = _ammoCapacity;
 
+        bool playerOne = (Jogador.PlayerOne == 0) ? true : false;
         if (playerOne) {
-            Spawn("playerSpawn1");
+            Spawn("playerSpawn");
             _input = "Horizontal-P1";
         } else {
             Spawn("playerSpawn2");
             _input = "Horizontal-P2";
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        _ammo = _ammoCapacity;
 
         _animator = GetComponent<Animator>();
         _rb2d = GetComponent<Rigidbody2D>();
@@ -72,6 +69,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        ammo = (_ammo + "/" + _ammoCapacity);
         Jump();
         SetMoviment();
     }
@@ -93,15 +91,8 @@ public class Player : MonoBehaviour
 
     void SetMoviment()
     {
-        if (playerID == 1) {
-            _axisX = Input.GetAxis("Horizontal-P1");
-            Moviment(_axisX);
-        } else if (playerID == 2) {
-            _axisX = Input.GetAxis("Horizontal-P2");
-            Moviment(_axisX);
-        } else {
-            Debug.LogWarning("não tem controles associados a esse ID");
-        }
+        _axisX = Input.GetAxis(_input);
+        Moviment(_axisX);
 
         _animator.SetBool("isWalking", _isWalking);
         _animator.SetBool("isIdle", !_isWalking);
@@ -129,76 +120,45 @@ public class Player : MonoBehaviour
 
     void Jump()
     {
-        if (playerID == 1) {
-            if (Input.GetKey(KeyCode.W) && _isGrounded) // qualquer variavel bool é entendida como TRUE dentro de verificações, exceto se for !bool
-            {
-                Vector2 _jump = new Vector2(0f, jumpForce);
-                _rb2d.AddForce(_jump, ForceMode2D.Impulse);
-            }
-        } else if (playerID == 2) {
-            if (Input.GetKey(KeyCode.UpArrow) && _isGrounded) // qualquer variavel bool é entendida como TRUE dentro de verificações, exceto se for !bool
-            {
-                Vector2 _jump = new Vector2(0f, jumpForce);
-                _rb2d.AddForce(_jump, ForceMode2D.Impulse);
-            }
-        } else {
-            Debug.LogWarning("não tem controles associados a esse ID");
+        if (Input.GetKey(_jumpKey) && _isGrounded) { // qualquer variavel bool é entendida como TRUE dentro de verificações, exceto se for !bool
+            Vector2 _jump = new Vector2(0f, jumpForce);
+            _rb2d.AddForce(_jump, ForceMode2D.Impulse);
         }
+        
     }
 
     void Shoot()
     {
-        if (playerID == 1) {
-            if ((_ammo > 0) && Input.GetKeyDown(KeyCode.LeftControl)) {
+        if ((_ammo > 0) && Input.GetKeyDown(_shootKey) && !_isReloading) {
                 SetShoot(_armaUsada, isFlipped);
                 --_ammo;
                 Debug.Log(_ammo);
-            } else if (Input.GetKey(KeyCode.R)) {
+        } else if (Input.GetKeyDown(_reloadKey)) {
                 StartCoroutine(Reload());
-            }
-        } else if (playerID == 2) {
-            if (Input.GetKeyUp(KeyCode.RightControl)) {
-                SetShoot(_armaUsada, isFlipped);
-            }
-        } else {
-            Debug.LogWarning("não tem controles associados a esse ID");
         }
     }
     IEnumerator Reload()
     {
-        for (int i = 0; i <= _ammoCapacity; i++) {
+        _isReloading = true;
+        for (int i = _ammo; i <= _ammoCapacity; i++) {
             _ammo = i;
+            int lastNum = _ammo;
             yield return new WaitForSeconds(0.5f);
             Debug.Log(_ammo);
         }
 
+        _isReloading = false;
+
         yield break;
     }
 
-    //void Knife()
-    //{
-    //    if (playerID == 1)
-    //    {
-    //        if (Input.GetKeyDown(KeyCode.LeftControl))
-    //        {
-    //            SetShoot(_armaUsada, isFlipped);
-    //        }
-    //    }
-    //    else if (playerID == 2)
-    //    {
-    //        if (!_anim.isPlaying)
-    //        {
-    //            if (Input.GetKeyUp(KeyCode.RightControl))
-    //            {
-    //                _anim.Play("attack");
-    //            }
-    //        }
-    //    }
-    //    else
-    //    {
-    //        Debug.LogWarning("não tem controles associados a esse ID");
-    //    }
-    //}
+    void Knife()
+    {
+        if (!_anim.isPlaying && Input.GetKeyUp(_attackKey)) {
+            _anim.Play("attack");
+        }
+
+    }
 
     void SetShoot(Transform _pos, bool _flip)
     {
