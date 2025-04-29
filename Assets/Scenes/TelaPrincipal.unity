@@ -1690,7 +1690,7 @@ GameObject:
   m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &703186437
 Transform:
   m_ObjectHideFlags: 0
@@ -1713,7 +1713,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 703186436}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 077acf911a48f1e4a8fbf58f55c6cb7b, type: 3}
   m_Name: 
@@ -2206,7 +2206,6 @@ GameObject:
   - component: {fileID: 1325398409}
   - component: {fileID: 1325398408}
   - component: {fileID: 1325398413}
-  - component: {fileID: 1325398414}
   m_Layer: 0
   m_Name: Player 1
   m_TagString: Player
@@ -2383,19 +2382,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1325398414
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1325398407}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88dea2e3094e3674a918993a0a589821, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controllerSelector: 0
 --- !u!1 &1329693283
 GameObject:
   m_ObjectHideFlags: 0

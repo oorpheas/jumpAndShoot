@@ -1,71 +1,72 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
-    static public int pID;
-    static public bool isFlipped;
+    [Header("Defina o Player")]
+    public Jogador jogador; // cria o seletor
+    public enum Jogador // cria o dropdown
+    {
+        PlayerOne,
+        PlayerTwo
+    }
 
-    public int playerID;
+    [Header("Especificações")]
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private int _speed, _ammoCapacity;
+    public float jumpForce, playerID;
 
-    public float jumpForce;
-
-    [SerializeField]
-    private GameObject bulletPrefab;
-
-    [SerializeField]
-    private int _speed, _ammoCapacity;
-    private int[] _ammo = new int[1];
-
+    private int _ammo;
     private float _axisX, _timer;
-
+    private string _animName;
     private bool _isGrounded, _isWalking;
 
+    public static bool isFlipped;
+
     private Rigidbody2D _rb2d;
-
-    private SpriteRenderer _sR;
-
     private Transform _gunL, _gunR, _armaUsada;
-
     private Animator _animator;
-
     private GameObject _spawn;
 
-    private string _animName;
+    [Header("Defina as Teclas")]
+    [SerializeField] private KeyCode _jumpKey;
+    [SerializeField] private KeyCode _shootKey;
+    [SerializeField] private KeyCode _reloadKey;
+    [SerializeField] private KeyCode _attackKey;
+
+    private string _input;
+
+    void Awake()
+    {
+        bool playerOne = (Jogador.PlayerOne == 0) ? true : false;
+
+        if (playerOne) {
+            Spawn("playerSpawn1");
+            _input = "Horizontal-P1";
+        } else {
+            Spawn("playerSpawn2");
+            _input = "Horizontal-P2";
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        // define ID publico
-        pID = playerID;
-        _ammo[0] = _ammoCapacity;
-        //_ammo[1] = _ammoCapacity;
+        _ammo = _ammoCapacity;
 
         _animator = GetComponent<Animator>();
         _rb2d = GetComponent<Rigidbody2D>();
-        _sR = GetComponent<SpriteRenderer>();
 
         _gunL = GetComponentInChildren<Transform>().Find("gunL");
         _gunR = GetComponentInChildren<Transform>().Find("gunR");
         _armaUsada = _gunR.transform;
-
-        if (playerID == 1) {
-            _spawn = GameObject.FindGameObjectWithTag("playerSpawn");
-            gameObject.transform.position = _spawn.transform.position;
-        } else if (playerID == 2) {
-            _spawn = GameObject.FindGameObjectWithTag("playerSpawn2");
-            gameObject.transform.position = _spawn.transform.position;
-
-            //_anim = gameObject.GetComponent<Animation>();
-        } else {
-            Debug.LogWarning("não tem controles associados a esse ID");
-        }
-
-
     }
 
     // Update is called once per frame
@@ -78,6 +79,11 @@ public class Player : MonoBehaviour
     void Update()
     {
         Shoot();
+    }
+    private void Spawn(string spawn)
+    {
+        _spawn = GameObject.FindGameObjectWithTag(spawn);
+        gameObject.transform.position = _spawn.transform.position;
     }
 
     void SetFlip()
@@ -100,9 +106,9 @@ public class Player : MonoBehaviour
         _animator.SetBool("isWalking", _isWalking);
         _animator.SetBool("isIdle", !_isWalking);
         Debug.LogWarning("player está: \n " +
-            "idle = " + _animator.GetBool("isIdle") +
-            " || andando = " + _animator.GetBool("isWalking") +
-            " || tá virado? " + _animator.GetBool("isFlipped"));
+            "idle? = " + _animator.GetBool("isIdle") +
+            " || andando? = " + _animator.GetBool("isWalking") +
+            " || virado? " + _animator.GetBool("isFlipped"));
     }
 
     void Moviment(float axis)
@@ -143,10 +149,10 @@ public class Player : MonoBehaviour
     void Shoot()
     {
         if (playerID == 1) {
-            if ((_ammo[0] > 0) && Input.GetKeyDown(KeyCode.LeftControl)) {
+            if ((_ammo > 0) && Input.GetKeyDown(KeyCode.LeftControl)) {
                 SetShoot(_armaUsada, isFlipped);
-                --_ammo[0];
-                Debug.Log(_ammo[0]);
+                --_ammo;
+                Debug.Log(_ammo);
             } else if (Input.GetKey(KeyCode.R)) {
                 StartCoroutine(Reload());
             }
@@ -161,9 +167,9 @@ public class Player : MonoBehaviour
     IEnumerator Reload()
     {
         for (int i = 0; i <= _ammoCapacity; i++) {
-            _ammo[0] = i;
+            _ammo = i;
             yield return new WaitForSeconds(0.5f);
-            Debug.Log(_ammo[0]);
+            Debug.Log(_ammo);
         }
 
         yield break;
@@ -247,4 +253,5 @@ public class Player : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
 }
