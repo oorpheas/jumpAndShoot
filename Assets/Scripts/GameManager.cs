@@ -6,11 +6,13 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
+
     static public int score;
-    static public string ammo;
+    static public string ammo, ammo2;
 
     public Text scoreTxt;
-    public Text ammoTxt;
+    public Text[] ammoTxt;
 
     public float spawnTimeMin, spawnTimeMax;
     public float waitHorde;
@@ -30,6 +32,11 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+
         _spawns = GameObject.FindGameObjectsWithTag("spawn");
         _player = GameObject.FindGameObjectWithTag("Player");
     }
@@ -45,10 +52,8 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ammo = Player.ammo;
 
         scoreTxt.text = score.ToString(); // converte em string e mostra na caixa de texto
-        ammoTxt.text = ammo;
 
         if (_player != null)
         {
@@ -60,6 +65,22 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(Horde());
             }                
         }
+    }
+    public void UpdateAmmo(int pId, string ammo)
+    {
+        ammoTxt[pId].text = ammo;
+
+        // Aqui você pode chamar atualizações de UI, efeitos, etc.
+    }
+
+    private void OnEnable()
+    {
+        Player.OnAmmoChanged += UpdateAmmo;
+    }
+
+    private void OnDisable()
+    {
+        Player.OnAmmoChanged -= UpdateAmmo;
     }
 
     void HordeManager (int howMuchZums, bool needRandom)

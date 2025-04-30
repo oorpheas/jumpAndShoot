@@ -6,10 +6,13 @@ using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
+    public static event Action<int, string> OnAmmoChanged;
+
     [Header("Defina o Player")]
     public Jogador jogador; // cria o seletor
     public enum Jogador // cria o dropdown
@@ -23,7 +26,7 @@ public class Player : MonoBehaviour
     [SerializeField] private int _speed, _ammoCapacity;
     [SerializeField] private float jumpForce;
 
-    private int _ammo;
+    private int _ammo, _id;
     private float _axisX, _timer;
     private string _animName;
     private bool _isGrounded, _isWalking, _isReloading;
@@ -49,13 +52,15 @@ public class Player : MonoBehaviour
     {
         _ammo = _ammoCapacity;
 
-        bool playerOne = (Jogador.PlayerOne == 0) ? true : false;
+        bool playerOne = (this.jogador == 0) ? true : false;
         if (playerOne) {
             Spawn("playerSpawn");
             _input = "Horizontal-P1";
+            _id = 0;
         } else {
             Spawn("playerSpawn2");
             _input = "Horizontal-P2";
+            _id = 1;
         }
 
         _animator = GetComponent<Animator>();
@@ -69,19 +74,29 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        ammo = (_ammo + "/" + _ammoCapacity);
         Jump();
         SetMoviment();
     }
 
     void Update()
     {
+        SetAmmo();
         Shoot();
     }
     private void Spawn(string spawn)
     {
         _spawn = GameObject.FindGameObjectWithTag(spawn);
         gameObject.transform.position = _spawn.transform.position;
+    }
+
+    void SetAmmo()
+    {
+        ammo = (_ammo + "/" + _ammoCapacity);
+    }
+    private void CallAmmoChange()
+    {
+        ammo = (_ammo + "/" + _ammoCapacity);
+        OnAmmoChanged?.Invoke(_id, ammo);
     }
 
     void SetFlip()
@@ -130,11 +145,12 @@ public class Player : MonoBehaviour
     void Shoot()
     {
         if ((_ammo > 0) && Input.GetKeyDown(_shootKey) && !_isReloading) {
-                SetShoot(_armaUsada, isFlipped);
-                --_ammo;
-                Debug.Log(_ammo);
+            SetShoot(_armaUsada, isFlipped);
+            --_ammo;
+            CallAmmoChange();
+            Debug.Log(_ammo);
         } else if (Input.GetKeyDown(_reloadKey)) {
-                StartCoroutine(Reload());
+            StartCoroutine(Reload());
         }
     }
     IEnumerator Reload()
@@ -144,6 +160,7 @@ public class Player : MonoBehaviour
             _ammo = i;
             int lastNum = _ammo;
             yield return new WaitForSeconds(0.5f);
+            CallAmmoChange();
             Debug.Log(_ammo);
         }
 
@@ -157,7 +174,6 @@ public class Player : MonoBehaviour
         if (!_anim.isPlaying && Input.GetKeyUp(_attackKey)) {
             _anim.Play("attack");
         }
-
     }
 
     void SetShoot(Transform _pos, bool _flip)
