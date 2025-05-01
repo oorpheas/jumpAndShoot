@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
     private int _ammo, _id;
     private float _axisX, _timer;
     private string _animName;
-    private bool _isGrounded, _isWalking, _isReloading;
+    private bool _isGrounded, _isWalking, _isReloading, _isFlipped;
 
     public static bool isFlipped;
     public static string ammo;
@@ -83,6 +83,7 @@ public class Player : MonoBehaviour
         SetAmmo();
         Shoot();
     }
+
     private void Spawn(string spawn)
     {
         _spawn = GameObject.FindGameObjectWithTag(spawn);
@@ -99,9 +100,12 @@ public class Player : MonoBehaviour
         OnAmmoChanged?.Invoke(_id, ammo);
     }
 
-    void SetFlip()
+    void SetFlip(float a)
     {
-        _animator.SetBool("isFlipped", isFlipped);
+        _isFlipped = (a < 0);
+        //_armaUsada = _isFlipped ? _gunL.transform : _gunR.transform;
+
+        _animator.SetBool("isFlipped", _isFlipped);
     }
 
     void SetMoviment()
@@ -111,10 +115,10 @@ public class Player : MonoBehaviour
 
         _animator.SetBool("isWalking", _isWalking);
         _animator.SetBool("isIdle", !_isWalking);
-        Debug.LogWarning("player está: \n " +
-            "idle? = " + _animator.GetBool("isIdle") +
-            " || andando? = " + _animator.GetBool("isWalking") +
-            " || virado? " + _animator.GetBool("isFlipped"));
+        //Debug.LogWarning("player está: \n " +
+        //    "idle? = " + _animator.GetBool("isIdle") +
+        //    " || andando? = " + _animator.GetBool("isWalking") +
+        //    " || virado? " + _animator.GetBool("isFlipped"));
     }
 
     void Moviment(float axis)
@@ -122,15 +126,11 @@ public class Player : MonoBehaviour
         _rb2d.velocity = new Vector2(axis * _speed, _rb2d.velocity.y); // em Y ele está recebendo a velocidade atribuida (ou seja, gravidade);_isWalking = (_rb2d.velocity.x != 0f); 
         _isWalking = (_rb2d.velocity.x != 0);
 
-        if (axis < 0) {
-            _armaUsada = _gunL.transform;
-            isFlipped = true;
-        } else if (axis > 0) {
-            _armaUsada = _gunR.transform;
-            isFlipped = false;
+        if (axis != 0) {
+            SetFlip(axis);
         }
 
-        SetFlip();
+        _armaUsada = _isFlipped ? _gunL.transform : _gunR.transform;
     }
 
     void Jump()
@@ -145,7 +145,7 @@ public class Player : MonoBehaviour
     void Shoot()
     {
         if ((_ammo > 0) && Input.GetKeyDown(_shootKey) && !_isReloading) {
-            SetShoot(_armaUsada, isFlipped);
+            SetShoot(_armaUsada, _isFlipped);
             --_ammo;
             CallAmmoChange();
             Debug.Log(_ammo);
@@ -156,14 +156,17 @@ public class Player : MonoBehaviour
     IEnumerator Reload()
     {
         _isReloading = true;
-        for (int i = _ammo; i <= _ammoCapacity; i++) {
-            _ammo = i;
-            int lastNum = _ammo;
-            yield return new WaitForSeconds(0.5f);
-            CallAmmoChange();
-            Debug.Log(_ammo);
-        }
+        //for (int i = _ammo; i <= _ammoCapacity; i++) {
+        //    _ammo = i;
+        //    int lastNum = _ammo;
+        //    yield return new WaitForSeconds(0.5f);
+        //    CallAmmoChange();
+        //    Debug.Log(_ammo);
+        //}
 
+        yield return new WaitForSeconds(2f);
+        _ammo = _ammoCapacity; 
+            
         _isReloading = false;
 
         yield break;
