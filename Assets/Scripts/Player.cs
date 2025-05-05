@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
     public static event Action<int, string> OnAmmoChanged;
     public static event Action<Collider2D, PolygonCollider2D, bool> PlayerPassed;
     public static event Action<Collider2D, PolygonCollider2D> PlayerWantedPass;
-    public static event Action PlayerInteracted;
+    public static event Action<int> PlayerInteracted;
     public static bool isFlipped;
     public static string ammo;
 
@@ -84,13 +84,13 @@ public class Player : MonoBehaviour
     {
         SetAmmo();
         Shoot();
+        Interacted();
     }
 
     void FixedUpdate()
     {
-        Jump();
-        Interacted();
         if (!_isAiming) {
+            Jump();
             SetMoviment();
         }
     }
@@ -111,7 +111,7 @@ public class Player : MonoBehaviour
     private void CallInteract()
     {
         Debug.Log("INTERAGIU!");
-        PlayerInteracted?.Invoke();
+        PlayerInteracted?.Invoke(_id);
     }
 
     // METODOS
@@ -139,13 +139,11 @@ public class Player : MonoBehaviour
     void Interacted()
     {
         if (_inInteractionArea && Input.GetKeyDown(_interactKey)) {
-            Debug.Log("esperando interação");
             _isAiming = !_isAiming;
             if (_isAiming) {
+                Debug.Log(_isAiming);
                 CallInteract();
-            } else {
-                Debug.Log("saiu da interação");
-            }
+            } 
         }
     }
 
