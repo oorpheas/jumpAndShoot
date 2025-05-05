@@ -82,8 +82,11 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        SetAmmo();
-        Shoot();
+        if (!_isAiming) {
+            SetAmmo();
+            Shoot();
+        }
+
         Interacted();
     }
 
@@ -92,6 +95,8 @@ public class Player : MonoBehaviour
         if (!_isAiming) {
             Jump();
             SetMoviment();
+        } else {
+            _animator.SetBool("isWalking", false);
         }
     }
 
@@ -110,7 +115,6 @@ public class Player : MonoBehaviour
 
     private void CallInteract()
     {
-        Debug.Log("INTERAGIU!");
         PlayerInteracted?.Invoke(_id);
     }
 
