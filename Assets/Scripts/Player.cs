@@ -11,8 +11,15 @@ using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
+    // VARIAVEIS ESTÁTICAS
     public static event Action<int, string> OnAmmoChanged;
+    public static event Action<Collider2D, PolygonCollider2D, bool> PlayerPassed;
+    public static event Action<Collider2D, PolygonCollider2D> PlayerWantedPass;
+    public static event Action PlayerInteracted;
+    public static bool isFlipped;
+    public static string ammo;
 
+    // CAMPOS VÍSIVEIS NO INSPECTOR
     [Header("Defina o Player")]
     public Jogador jogador; // cria o seletor
     public enum Jogador // cria o dropdown
@@ -26,34 +33,35 @@ public class Player : MonoBehaviour
     [SerializeField] private int _speed, _ammoCapacity;
     [SerializeField] private float jumpForce;
 
+    [Header("Defina as Teclas")]
+    [SerializeField] private KeyCode _jumpKey;
+    [SerializeField] private KeyCode _downKey;
+    [SerializeField] private KeyCode _shootKey;
+    [SerializeField] private KeyCode _reloadKey;
+    [SerializeField] private KeyCode _interactKey;
+    [SerializeField] private KeyCode _attackKey;
+
+    // CAMPOS PRIVADOS;
     private int _ammo, _id;
     private float _axisX, _timer;
-    private string _animName;
-    private bool _isGrounded, _isWalking, _isReloading, _isFlipped;
-
-    public static bool isFlipped;
-    public static string ammo;
+    private string _animName, _input;
+    private bool _isGrounded, _inInteractionArea, _isWalking, _isReloading, _isFlipped, _isRight, _playerOne, _isAiming;
 
     private Rigidbody2D _rb2d;
     private Transform _gunL, _gunR, _armaUsada;
     private Animator _animator;
     private Animation _anim;
     private GameObject _spawn;
-
-    [Header("Defina as Teclas")]
-    [SerializeField] private KeyCode _jumpKey;
-    [SerializeField] private KeyCode _shootKey;
-    [SerializeField] private KeyCode _reloadKey;
-    [SerializeField] private KeyCode _attackKey;
-
-    private string _input;
+    private Collider2D _self;
+    private PolygonCollider2D _collider;
 
     void Awake()
     {
+        _isAiming = false;
         _ammo = _ammoCapacity;
 
-        bool playerOne = (this.jogador == 0) ? true : false;
-        if (playerOne) {
+        _playerOne = (this.jogador == 0);
+        if (_playerOne) {
             Spawn("playerSpawn");
             _input = "Horizontal-P1";
             _id = 0;
@@ -68,14 +76,8 @@ public class Player : MonoBehaviour
 
         _gunL = GetComponentInChildren<Transform>().Find("gunL");
         _gunR = GetComponentInChildren<Transform>().Find("gunR");
-        _armaUsada = _gunR.transform;
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        Jump();
-        SetMoviment();
+        _armaUsada = _gunR;
+        _self = gameObject.GetComponent<Collider2D>();
     }
 
     void Update()
@@ -84,42 +86,35 @@ public class Player : MonoBehaviour
         Shoot();
     }
 
+    void FixedUpdate()
+    {
+        Jump();
+        Interacted();
+        if (!_isAiming) {
+            SetMoviment();
+        }
+    }
+
     private void Spawn(string spawn)
     {
         _spawn = GameObject.FindGameObjectWithTag(spawn);
         gameObject.transform.position = _spawn.transform.position;
     }
 
-    void SetAmmo()
-    {
-        ammo = (_ammo + "/" + _ammoCapacity);
-    }
+    // CHAMA EVENTOS
     private void CallAmmoChange()
     {
         ammo = (_ammo + "/" + _ammoCapacity);
         OnAmmoChanged?.Invoke(_id, ammo);
     }
 
-    void SetFlip(float a)
+    private void CallInteract()
     {
-        _isFlipped = (a < 0);
-        //_armaUsada = _isFlipped ? _gunL.transform : _gunR.transform;
-
-        _animator.SetBool("isFlipped", _isFlipped);
+        Debug.Log("INTERAGIU!");
+        PlayerInteracted?.Invoke();
     }
 
-    void SetMoviment()
-    {
-        _axisX = Input.GetAxis(_input);
-        Moviment(_axisX);
-
-        _animator.SetBool("isWalking", _isWalking);
-        _animator.SetBool("isIdle", !_isWalking);
-        //Debug.LogWarning("player está: \n " +
-        //    "idle? = " + _animator.GetBool("isIdle") +
-        //    " || andando? = " + _animator.GetBool("isWalking") +
-        //    " || virado? " + _animator.GetBool("isFlipped"));
-    }
+    // METODOS
 
     void Moviment(float axis)
     {
@@ -139,7 +134,19 @@ public class Player : MonoBehaviour
             Vector2 _jump = new Vector2(0f, jumpForce);
             _rb2d.AddForce(_jump, ForceMode2D.Impulse);
         }
-        
+    }
+
+    void Interacted()
+    {
+        if (_inInteractionArea && Input.GetKeyDown(_interactKey)) {
+            Debug.Log("esperando interação");
+            _isAiming = !_isAiming;
+            if (_isAiming) {
+                CallInteract();
+            } else {
+                Debug.Log("saiu da interação");
+            }
+        }
     }
 
     void Shoot()
@@ -148,37 +155,35 @@ public class Player : MonoBehaviour
             SetShoot(_armaUsada, _isFlipped);
             --_ammo;
             CallAmmoChange();
-            Debug.Log(_ammo);
         } else if (Input.GetKeyDown(_reloadKey)) {
             StartCoroutine(Reload());
         }
     }
-    IEnumerator Reload()
+
+    // SETs
+    void SetAmmo()
     {
-        _isReloading = true;
-        //for (int i = _ammo; i <= _ammoCapacity; i++) {
-        //    _ammo = i;
-        //    int lastNum = _ammo;
-        //    yield return new WaitForSeconds(0.5f);
-        //    CallAmmoChange();
-        //    Debug.Log(_ammo);
-        //}
-
-        yield return new WaitForSeconds(2f);
-        _ammo = _ammoCapacity; 
-            
-        _isReloading = false;
-
-        yield break;
+        ammo = (_ammo + "/" + _ammoCapacity);
     }
 
-    void Knife()
+    void SetFlip(float a)
     {
-        if (!_anim.isPlaying && Input.GetKeyUp(_attackKey)) {
-            _anim.Play("attack");
-        }
+        _isFlipped = (a < 0);
+        _animator.SetBool("isFlipped", _isFlipped);
     }
 
+    void SetMoviment()
+    {
+        _axisX = Input.GetAxis(_input);
+        Moviment(_axisX);
+
+        _animator.SetBool("isWalking", _isWalking);
+        _animator.SetBool("isIdle", !_isWalking);
+        //Debug.LogWarning("player está: \n " +
+        //    "idle? = " + _animator.GetBool("isIdle") +
+        //    " || andando? = " + _animator.GetBool("isWalking") +
+        //    " || virado? " + _animator.GetBool("isFlipped"));
+    }
     void SetShoot(Transform _pos, bool _flip)
     {
         if (!_flip) {
@@ -192,30 +197,65 @@ public class Player : MonoBehaviour
         }
     }
 
+    void Knife()
+    {
+        if (!_anim.isPlaying && Input.GetKeyUp(_attackKey)) {
+            _anim.Play("attack");
+        }
+    }
+
+    // RECARGA
+    IEnumerator Reload()
+    {
+        _isReloading = true;
+
+        //for (int i = _ammo; i <= _ammoCapacity; i++) {
+        //    _ammo = i;
+        //    int lastNum = _ammo;
+        //    yield return new WaitForSeconds(0.5f);
+        //    CallAmmoChange();
+        //    Debug.Log(_ammo);
+        //}
+
+        yield return new WaitForSeconds(2f);
+        _ammo = _ammoCapacity;
+
+        CallAmmoChange();
+        _isReloading = false;
+
+        yield break;
+    }
+
+    // ANIMAÇÃO
     IEnumerator Anim(string boolName, string animName)
     {
-        Debug.Log("entrou");
         _animator.SetBool(boolName, true);
 
         yield return null;
 
         while (_animator.GetCurrentAnimatorStateInfo(0).IsName(animName) &&
             _animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f) {
-            Debug.Log("esperou");
             yield return null;
         }
 
         _animator.SetBool(boolName, false);
 
-        Debug.Log("saiu");
-
         yield break;
     }
 
+    // COLISSÕES
     private void OnCollisionStay2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("ground")) {
             _isGrounded = true;
+        }
+
+        if (other.gameObject.CompareTag("sensor")){
+            if (Input.GetKey(_downKey)) {
+                _collider = other.gameObject.GetComponent<PolygonCollider2D>();
+                PlayerWantedPass?.Invoke(_self, _collider);
+
+            }
         }
     }
 
@@ -230,7 +270,33 @@ public class Player : MonoBehaviour
     {
         if (other.gameObject.CompareTag("enemy")) {
             Destroy(gameObject);
+        } 
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("sensor")) {
+            _collider = other.gameObject.GetComponent<PolygonCollider2D>();
+            _isRight = (_axisX > 0);
+            PlayerPassed?.Invoke(_self, _collider, !_isRight);
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("arma")) {
+            _inInteractionArea = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("arma")) {
+            _inInteractionArea = false;
         }
     }
 
 }
+
+
+

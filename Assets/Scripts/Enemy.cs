@@ -62,10 +62,6 @@ public class Enemy : MonoBehaviour
 
         } else {
             FindPlayer();
-            if (_player[_choosePlayer] == null) {
-                _animator.SetBool("isWalking", false);
-                _animator.SetBool("isDancing", true);
-            }
         }
 
         if (_cooldown < _timer) {
@@ -79,7 +75,12 @@ public class Enemy : MonoBehaviour
     void FindPlayer()
     {
         _player = GameObject.FindGameObjectsWithTag("Player");
-        _choosePlayer = Random.Range(0, _player.Length);
+        if (_player != null) {
+            _choosePlayer = Random.Range(0, _player.Length);
+        } else {
+            _animator.SetBool("isWalking", false);
+            _animator.SetBool("isDancing", true);
+        }
     }
 
     void MoveToPlayer()

@@ -12,6 +12,7 @@ TagManager:
   - playerSpawn
   - playerSpawn2
   - knife
+  - sensor
   layers:
   - Default
   - TransparentFX

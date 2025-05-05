@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     static public int score;
-    static public string ammo, ammo2;
+    static public string ammo;
 
     public Text scoreTxt;
     public Text[] ammoTxt;
@@ -37,40 +37,32 @@ public class GameManager : MonoBehaviour
         else
             Destroy(gameObject);
 
-        _spawns = GameObject.FindGameObjectsWithTag("spawn");
-        _player = GameObject.FindGameObjectWithTag("Player");
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        //Debug.Log(_spawns[0]);
-        //Debug.Log(_spawns[1]);
-
+        _spawns = GameObject.FindGameObjectsWithTag("spawn"); // encontra os spawn
+        _player = GameObject.FindGameObjectWithTag("Player"); // encontra o player
     }
 
     // Update is called once per frame
     void Update()
     {
-
         scoreTxt.text = score.ToString(); // converte em string e mostra na caixa de texto
 
         if (_player != null)
         {
-            LookForZombies();
+            LookForZombies(); // procura por zumbis
 
             if (!_zums)
             {
                 //Debug.Log("Corrotina iniciada");
-                StartCoroutine(Horde());
+                StartCoroutine(Horde()); // chama a a horda
             }                
         }
     }
+
+    // ATUALIZAÇÃO DE MUNIÇÃO DOS PLAYERS;
+
     public void UpdateAmmo(int pId, string ammo)
     {
-        ammoTxt[pId].text = ammo;
-
-        // Aqui você pode chamar atualizações de UI, efeitos, etc.
+        ammoTxt[pId].text = ammo; // atualiza o texto da munição;
     }
 
     private void OnEnable()
@@ -83,37 +75,8 @@ public class GameManager : MonoBehaviour
         Player.OnAmmoChanged -= UpdateAmmo;
     }
 
-    void HordeManager (int howMuchZums, bool needRandom)
-    {
-        if (needRandom)
-        {
-            if (_hordeCount == 1)
-            {
-                StartCoroutine(SpawnZums(howMuchZums, 0));
-            }
-            if (_hordeCount == 2)
-            {
-                StartCoroutine(SpawnZums(howMuchZums, 1));
-            }
-        }
-        else 
-        {
-            _spawnSelect = Random.Range(0, _spawns.Length);
-            StartCoroutine(SpawnZums(howMuchZums, 3));
-            for (int i = 0; i < howMuchZums; i++)
-            {
-                _spawnSelect = Random.Range(0, _spawns.Length);
-                SpawnEnemy(_spawnSelect);
-            }
-        }
-    }
-
-    void SpawnEnemy(int selectSpawn)
-    {
-        Instantiate(enemy, _spawns[selectSpawn].transform.position, transform.rotation);
-    }
-
-    private bool LookForZombies()
+    // ORGANIZAÇÃO DE HORDAS E SPAWN DE ZOMBIES;
+    private bool LookForZombies() // procura por zumbis para encerrar a horda;
     {
         _enemy = GameObject.FindGameObjectWithTag("enemy");
         _zums = (_enemy != null);
@@ -121,7 +84,7 @@ public class GameManager : MonoBehaviour
         return _zums;
     }
 
-    IEnumerator Horde()
+    IEnumerator Horde() // chama horda;
     {
         _hordeCount++;
         Debug.Log("O número de horda é:" + _hordeCount);
@@ -140,7 +103,27 @@ public class GameManager : MonoBehaviour
         yield break;
     }
 
-    IEnumerator SpawnZums(int Zums, int spawn)
+    void HordeManager (int howMuchZums, bool needRandom) // organiza as hordas de zumbis;
+    {
+        if (needRandom)
+        {
+            if (_hordeCount == 1)
+            {
+                StartCoroutine(SpawnZums(howMuchZums, 0));
+            }
+            if (_hordeCount == 2)
+            {
+                StartCoroutine(SpawnZums(howMuchZums, 1));
+            }
+        }
+        else 
+        {
+            _spawnSelect = Random.Range(0, _spawns.Length);
+            StartCoroutine(SpawnZums(howMuchZums, 3));
+        }
+    }
+
+    IEnumerator SpawnZums(int Zums, int spawn) // spawn de zumbies por tempo;
     {
         if (spawn == 3) {
             for (int i = 0; i < Zums; i++) {
@@ -158,5 +141,9 @@ public class GameManager : MonoBehaviour
         }
 
         yield break;
+    }
+    void SpawnEnemy(int selectSpawn) // spawna zumbies;
+    {
+        Instantiate(enemy, _spawns[selectSpawn].transform.position, transform.rotation);
     }
 }
