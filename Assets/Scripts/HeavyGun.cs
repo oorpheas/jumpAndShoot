@@ -20,6 +20,7 @@ public class HeavyGun : MonoBehaviour
     [SerializeField] private float _maxF;
     [SerializeField] private float _forceAdd;
     [SerializeField] private float _shootSpeed;
+    [SerializeField] private float _ammoCapacity;
 
     [Header("Trajetória")]
     [SerializeField] private int _trajectorySteps;
@@ -31,9 +32,9 @@ public class HeavyGun : MonoBehaviour
     private GameObject _shoot;
 
     private string _axisKey;
-    private float _actualForce;
+    private float _actualForce, _ammo;
     private float _axisY;
-    private bool _operative;
+    private bool _operative, _reloading;
 
     static public float force;
 
@@ -53,6 +54,8 @@ public class HeavyGun : MonoBehaviour
     {
         _lR = GetComponent<LineRenderer>();
         _actualForce = _minF;
+
+        _ammo = _ammoCapacity;
     }
 
     void Update()
@@ -60,8 +63,10 @@ public class HeavyGun : MonoBehaviour
         if (_operative) {
             IsOn();
             ShowTrajectory();
-            if (Input.GetKeyDown(_shootKey)) {
+            if (Input.GetKeyDown(Player.sKey) && !_reloading && (_ammo > 0)) {
                 Shoot();
+            } else if (Input.GetKey(Player.rKey) && !_reloading) {
+                //StartCoroutine(Reload());
             }
         }
     }
@@ -95,6 +100,20 @@ public class HeavyGun : MonoBehaviour
             Vector2 forceDir = _shootPos.right.normalized * _actualForce;
             rb.AddForce(forceDir, ForceMode2D.Impulse);
         }
+        //_ammo--;
+    }
+
+    IEnumerator Reload()
+    {
+        _reloading = true;
+
+        yield return new WaitForSeconds(5f);
+        _ammo = _ammoCapacity;
+
+        // CallAmmoChange();
+        _reloading = false;
+
+        yield break;
     }
 
     private void GunSystem(int _p)

@@ -10,7 +10,12 @@ public class BulletHeavyGun : MonoBehaviour
     void Update()
     {
         _timer += Time.deltaTime;
+        DestroyBullet();
 
+    }
+
+    void DestroyBullet()
+    {
         if (_timer > 3) {
             Destroy(gameObject);
         }

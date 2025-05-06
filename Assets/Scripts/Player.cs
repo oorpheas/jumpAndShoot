@@ -36,10 +36,15 @@ public class Player : MonoBehaviour
     [Header("Defina as Teclas")]
     [SerializeField] private KeyCode _jumpKey;
     [SerializeField] private KeyCode _downKey;
-    [SerializeField] private KeyCode _shootKey;
-    [SerializeField] private KeyCode _reloadKey;
     [SerializeField] private KeyCode _interactKey;
     [SerializeField] private KeyCode _attackKey;
+
+    [Header("Teclas para Armas")]
+    public KeyCode shootKey;
+    public KeyCode reloadKey;
+
+    static public KeyCode sKey;
+    static public KeyCode rKey;
 
     // CAMPOS PRIVADOS;
     private int _ammo, _id;
@@ -78,6 +83,10 @@ public class Player : MonoBehaviour
         _gunR = GetComponentInChildren<Transform>().Find("gunR");
         _armaUsada = _gunR;
         _self = gameObject.GetComponent<Collider2D>();
+
+        sKey = shootKey;
+        rKey = reloadKey;
+        
     }
 
     void Update()
@@ -153,11 +162,11 @@ public class Player : MonoBehaviour
 
     void Shoot()
     {
-        if ((_ammo > 0) && Input.GetKeyDown(_shootKey) && !_isReloading) {
+        if ((_ammo > 0) && Input.GetKeyDown(shootKey) && !_isReloading) {
             SetShoot(_armaUsada, _isFlipped);
             --_ammo;
             CallAmmoChange();
-        } else if (Input.GetKeyDown(_reloadKey)) {
+        } else if (Input.GetKeyDown(reloadKey)) {
             StartCoroutine(Reload());
         }
     }

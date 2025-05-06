@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            zombies += zombies / 4;
+            zombies += zombies / 3;
             //Debug.Log(zombies);
             HordeManager(zombies, _random);
         }
