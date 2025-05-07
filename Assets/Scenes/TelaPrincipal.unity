@@ -1162,8 +1162,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 350445613}
-  - {fileID: 1990426623}
   - {fileID: 898147084}
+  - {fileID: 1990426623}
   - {fileID: 212971808}
   m_Father: {fileID: 1706785710}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2667,7 +2667,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 3203417203334106508, guid: 424fee4b78d95a9429bf527bb227078a, type: 3}
   _speed: 8
   _ammoCapacity: 12
-  jumpForce: 3
+  jumpForce: 2
   _jumpKey: 119
   _downKey: 115
   _interactKey: 102
@@ -3970,7 +3970,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 3203417203334106508, guid: 424fee4b78d95a9429bf527bb227078a, type: 3}
   _speed: 8
   _ammoCapacity: 12
-  jumpForce: 3
+  jumpForce: 2
   _jumpKey: 273
   _downKey: 274
   _interactKey: 13

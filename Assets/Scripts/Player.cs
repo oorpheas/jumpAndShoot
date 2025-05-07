@@ -306,7 +306,6 @@ public class Player : MonoBehaviour
             _inInteractionArea = false;
         }
     }
-
 }
 
 

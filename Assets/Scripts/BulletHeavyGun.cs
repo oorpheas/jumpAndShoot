@@ -11,7 +11,6 @@ public class BulletHeavyGun : MonoBehaviour
     {
         _timer += Time.deltaTime;
         DestroyBullet();
-
     }
 
     void DestroyBullet()
