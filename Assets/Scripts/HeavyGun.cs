@@ -9,37 +9,37 @@ public class HeavyGun : MonoBehaviour
     public static HeavyGun Instance;
 
     [Header("Referências")]
+    [SerializeField] private Transform _shootPos;
     [SerializeField] private GameObject _shootPrefab;
     [SerializeField] private LineRenderer _lR;
 
+
     [Header("Informações")]
+    [SerializeField] private int _idWeapon;
     [SerializeField] private float _minF;
     [SerializeField] private float _maxF;
     [SerializeField] private float _forceAdd;
     [SerializeField] private float _shootSpeed;
+    [SerializeField] private float _ammoCapacity;
 
     [Header("Trajetória")]
     [SerializeField] private int _trajectorySteps;
     [SerializeField] private float _timeStep;
-    [SerializeField] private Transform _shootPos;
 
-    private KeyCode _shootKey, _interactKey;
+    [Header("Comandos")]
+    [SerializeField] private KeyCode _shootKey;
+
     private GameObject _shoot;
 
     private string _axisKey;
-    private float _actualForce;
+    private float _actualForce, _ammo;
     private float _axisY;
-    private int _whichGun;
-    private bool _operative;
+    private bool _operative, _reloading;
 
-    private Vector2 _direction;
-    private Vector2 _velocity;
-    private Vector2 _startPos;
-    private Vector2 _forceDir;
-    private Vector2 _pos;
+    static public float force;
 
+    private Vector2 _projectil;
     private Rigidbody2D _rb;
-
 
     void Awake()
     {
@@ -54,6 +54,8 @@ public class HeavyGun : MonoBehaviour
     {
         _lR = GetComponent<LineRenderer>();
         _actualForce = _minF;
+
+        _ammo = _ammoCapacity;
     }
 
     void Update()
@@ -61,8 +63,10 @@ public class HeavyGun : MonoBehaviour
         if (_operative) {
             IsOn();
             ShowTrajectory();
-            if (Input.GetKeyDown(_shootKey)) {
+            if (Input.GetKeyDown(Player.sKey) && !_reloading && (_ammo > 0)) {
                 Shoot();
+            } else if (Input.GetKey(Player.rKey) && !_reloading) {
+                //StartCoroutine(Reload());
             }
         }
     }
@@ -76,20 +80,15 @@ public class HeavyGun : MonoBehaviour
 
     void ShowTrajectory()
     {
-        if (_shootPos?.position.x > 0) {
-            _direction =_shootPos.right.normalized;
-        } else {
-            _direction = -_shootPos.right.normalized;
-        }
-
-        _velocity = _direction * _actualForce;
-        _startPos = _shootPos.position;
+        Vector2 _direction = _shootPos.right.normalized;
+        Vector2 _velocity = _direction * _actualForce;
+        Vector2 _startPos = _shootPos.position;
         _lR.positionCount = _trajectorySteps;
 
         for (int i = 0; i < _trajectorySteps; i++) {
             float t = i * _timeStep; // tempo para esse ponto
-            _pos = _startPos + _velocity * t + 0.5f * Physics2D.gravity * t * t;
-            _lR.SetPosition(i, _pos);
+            Vector2 pos = _startPos + _velocity * t + 0.5f * Physics2D.gravity * t * t;
+            _lR.SetPosition(i, pos);
         }
     }
 
@@ -98,16 +97,26 @@ public class HeavyGun : MonoBehaviour
         _shoot = Instantiate(_shootPrefab, _shootPos.position, Quaternion.identity);
         Rigidbody2D rb = _shoot.GetComponent<Rigidbody2D>();
         if (rb != null) {
-            if (_shootPos.position.x > 0) {
-                _forceDir = _shootPos.right.normalized * _actualForce;
-            } else {
-                _forceDir = -_shootPos.right.normalized * _actualForce;
-            }
-            rb.AddForce(_forceDir * _shootSpeed, ForceMode2D.Impulse);
+            Vector2 forceDir = _shootPos.right.normalized * _actualForce;
+            rb.AddForce(forceDir, ForceMode2D.Impulse);
         }
+        //_ammo--;
     }
 
-    private void GunSystem(int _p, Transform _t)
+    IEnumerator Reload()
+    {
+        _reloading = true;
+
+        yield return new WaitForSeconds(5f);
+        _ammo = _ammoCapacity;
+
+        // CallAmmoChange();
+        _reloading = false;
+
+        yield break;
+    }
+
+    private void GunSystem(int _p)
     {
         if (_p == 0) {
             _axisKey = "Vertical-P1";
@@ -115,9 +124,6 @@ public class HeavyGun : MonoBehaviour
             _axisKey = "Vertical-P2";
         }
 
-        _shootPos = _t;
-        _shootKey = Player.shootK;
-        _interactKey = Player.interactionK;
         _operative = true;
     }
 

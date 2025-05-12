@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4417262657362827379}
   - component: {fileID: -1240470457862126217}
   - component: {fileID: 6870786950936100379}
-  - component: {fileID: 2058779759004631150}
+  - component: {fileID: -8474166175228718828}
   m_Layer: 0
   m_Name: bullet2Prefab
   m_TagString: bullet
@@ -149,7 +149,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &2058779759004631150
+--- !u!114 &-8474166175228718828
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

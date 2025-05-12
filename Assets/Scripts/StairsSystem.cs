@@ -8,17 +8,6 @@ public class StairsSystem : MonoBehaviour
 {
     public static StairsSystem Instance;
 
-    //// ESCADAS
-    //[Header("Escadas da Casa")]
-    //[SerializeField] private GameObject _stairsDown;
-    //[SerializeField] private GameObject _connection;
-    //[SerializeField] private GameObject _stairsUp;
-
-    //// SENSORES
-    //[Header("Sensores")]
-    //[SerializeField] private GameObject _sensorD;
-    //[SerializeField] private GameObject _sensorE;
-
     void Awake()
     {
         if (Instance == null)
