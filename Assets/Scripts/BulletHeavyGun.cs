@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BulletHeavyGun : MonoBehaviour
-{
+{   
     private Animator _anim;
     private float _timer;
 
     void Update()
     {
         _timer += Time.deltaTime;
+        DestroyBullet();
+    }
 
-        if (_timer > 3) {
+    void DestroyBullet()
+    {
+        if (_timer > 3f) {
             Destroy(gameObject);
         }
     }
@@ -34,8 +38,8 @@ public class BulletHeavyGun : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("enemy") || other.gameObject.CompareTag("ground")) { 
+        if (!other.gameObject.CompareTag("Player"))
+            Destroy(gameObject);
             //StartCoroutine(Anim());
-        }
     }
 }

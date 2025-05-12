@@ -22,7 +22,7 @@ public class Bullet : MonoBehaviour
 
     void DestroyBullet()
     {
-        if (_timer > 3) {
+        if (_timer > 3f) {
             Destroy(gameObject);
         }
     }

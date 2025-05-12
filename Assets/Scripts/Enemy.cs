@@ -85,7 +85,7 @@ public class Enemy : MonoBehaviour
 
     void MoveToPlayer()
     {
-        transform.position = Vector3.MoveTowards(gameObject.transform.position, _player[_choosePlayer].transform.position, _enemySpeed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(gameObject.transform.position, _player[_choosePlayer].transform.position, _enemySpeed * Time.deltaTime);
         _distance = Vector2.Distance(transform.position, _player[_choosePlayer].transform.position);
         _animator.SetBool("isWalking", true);
     }

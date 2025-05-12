@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
     public static event Action<int, string> OnAmmoChanged;
     public static event Action<Collider2D, PolygonCollider2D, bool> PlayerPassed;
     public static event Action<Collider2D, PolygonCollider2D> PlayerWantedPass;
-    public static event Action<int> PlayerInteracted;
+    public static event Action<int, Transform> PlayerInteracted;
     public static bool isFlipped;
     public static string ammo;
 
@@ -48,12 +48,14 @@ public class Player : MonoBehaviour
     private bool _isGrounded, _inInteractionArea, _isWalking, _isReloading, _isFlipped, _isRight, _playerOne, _isAiming;
 
     private Rigidbody2D _rb2d;
-    private Transform _gunL, _gunR, _armaUsada;
+    private Transform _gunL, _gunR, _armaUsada, _heavygun;
     private Animator _animator;
     private Animation _anim;
     private GameObject _spawn;
     private Collider2D _self;
     private PolygonCollider2D _collider;
+
+    static public KeyCode shootK, interactionK;
 
     void Awake()
     {
@@ -73,11 +75,15 @@ public class Player : MonoBehaviour
 
         _animator = GetComponent<Animator>();
         _rb2d = GetComponent<Rigidbody2D>();
+        _self = gameObject.GetComponent<Collider2D>();
 
         _gunL = GetComponentInChildren<Transform>().Find("gunL");
         _gunR = GetComponentInChildren<Transform>().Find("gunR");
+
         _armaUsada = _gunR;
-        _self = gameObject.GetComponent<Collider2D>();
+
+        shootK = _shootKey;
+        interactionK = _interactKey;
     }
 
     void Update()
@@ -115,7 +121,7 @@ public class Player : MonoBehaviour
 
     private void CallInteract()
     {
-        PlayerInteracted?.Invoke(_id);
+        PlayerInteracted?.Invoke(_id, _heavygun);
     }
 
     // METODOS
@@ -286,14 +292,15 @@ public class Player : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("arma")) {
+        if (other.gameObject.CompareTag("arma") || other.gameObject.CompareTag("arma2")) {
             _inInteractionArea = true;
+            _heavygun = other.transform;
         }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("arma")) {
+        if (other.gameObject.CompareTag("arma") || other.gameObject.CompareTag("arma2")) {
             _inInteractionArea = false;
         }
     }
