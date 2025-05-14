@@ -26,9 +26,6 @@ public class HeavyGun : MonoBehaviour
     [SerializeField] private int _trajectorySteps;
     [SerializeField] private float _timeStep;
 
-    [Header("Comandos")]
-    [SerializeField] private KeyCode _shootKey;
-
     private GameObject _shoot;
 
     private string _axisKey;
@@ -38,8 +35,9 @@ public class HeavyGun : MonoBehaviour
 
     static public float force;
 
-    private Vector2 _projectil;
     private Rigidbody2D _rb;
+
+    private KeyCode _shootK, _reloadK;
 
     void Awake()
     {
@@ -60,15 +58,7 @@ public class HeavyGun : MonoBehaviour
 
     void Update()
     {
-        if (_operative) {
-            IsOn();
-            ShowTrajectory();
-            if (Input.GetKeyDown(Player.sKey) && !_reloading && (_ammo > 0)) {
-                Shoot();
-            } else if (Input.GetKey(Player.rKey) && !_reloading) {
-                //StartCoroutine(Reload());
-            }
-        }
+  
     }
 
     void IsOn()
@@ -124,7 +114,16 @@ public class HeavyGun : MonoBehaviour
             _axisKey = "Vertical-P2";
         }
 
-        _operative = true;
+        _shootK = Player.sKey;
+        _reloadK = Player.rKey;
+
+        IsOn();
+        ShowTrajectory();
+        if (Input.GetKeyDown(Player.sKey) && !_reloading && (_ammo > 0)) {
+            Shoot();
+        } else if (Input.GetKey(Player.rKey) && !_reloading) {
+            StartCoroutine(Reload());
+        }
     }
 
     private void OnEnable()
