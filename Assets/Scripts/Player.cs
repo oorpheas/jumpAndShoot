@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     public static event Action<Collider2D, PolygonCollider2D, bool> PlayerPassed;
     public static event Action<Collider2D, PolygonCollider2D> PlayerWantedPass;
     public static event Action<int, Transform> PlayerInteracted;
-    public static bool isFlipped;
+    public static bool isFlipped, playerStats;
     public static string ammo;
 
     // CAMPOS VÍSIVEIS NO INSPECTOR
@@ -150,8 +150,8 @@ public class Player : MonoBehaviour
     {
         if (_inInteractionArea && Input.GetKeyDown(_interactKey)) {
             _isAiming = !_isAiming;
+            playerStats = _isAiming;
             if (_isAiming) {
-                Debug.Log(_isAiming);
                 CallInteract();
             } 
         }
@@ -294,7 +294,7 @@ public class Player : MonoBehaviour
     {
         if (other.gameObject.CompareTag("arma") || other.gameObject.CompareTag("arma2")) {
             _inInteractionArea = true;
-            _heavygun = other.transform;
+            _heavygun = other.GetComponentInChildren<Transform>().Find("pos");
         }
     }
 

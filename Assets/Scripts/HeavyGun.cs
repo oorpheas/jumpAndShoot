@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using static UnityEditor.Searcher.SearcherWindow.Alignment;
 using static UnityEngine.Rendering.HDROutputUtils;
@@ -58,12 +59,15 @@ public class HeavyGun : MonoBehaviour
 
     void Update()
     {
-        if (_operative) {
+        if (Player.playerStats) {
+            _lR.enabled = true;
             IsOn();
             ShowTrajectory();
             if (Input.GetKeyDown(_shootKey)) {
                 Shoot();
             }
+        } else {
+            _lR.enabled = false;
         }
     }
 
@@ -72,6 +76,11 @@ public class HeavyGun : MonoBehaviour
         _axisY = Input.GetAxis(_axisKey);
         _actualForce += _axisY * _forceAdd * Time.deltaTime;
         _actualForce = Mathf.Clamp(_actualForce, _minF, _maxF);
+
+        ShowTrajectory();
+        if (Input.GetKeyDown(_shootKey)) {
+            Shoot();
+        }
     }
 
     void ShowTrajectory()
@@ -118,7 +127,6 @@ public class HeavyGun : MonoBehaviour
         _shootPos = _t;
         _shootKey = Player.shootK;
         _interactKey = Player.interactionK;
-        _operative = true;
     }
 
     private void OnEnable()
