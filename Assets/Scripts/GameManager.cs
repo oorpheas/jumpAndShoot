@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine.UI;
 using UnityEngine;
 using System;
@@ -118,7 +116,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            zombies += zombies / 4;
+            zombies += zombies / 3;
             HordeManager(zombies, _random);
         }
 

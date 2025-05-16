@@ -1,11 +1,7 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Searcher.SearcherWindow.Alignment;
-using static UnityEngine.Rendering.HDROutputUtils;
 
 public class HeavyGun : MonoBehaviour
 {
