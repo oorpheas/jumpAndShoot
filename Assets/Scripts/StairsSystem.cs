@@ -45,15 +45,15 @@ public class StairsSystem : MonoBehaviour
         StartCoroutine(ChangeCollider(player, collider));
     }
 
-    private void OnEnable()
-    {
-        Player.PlayerPassed += UpdateCollision;
-        Player.PlayerWantedPass += ChangeCollision;
-    }
+    //private void OnEnable()
+    //{
+    //    Player.PlayerPassed += UpdateCollision;
+    //    Player.PlayerWantedPass += ChangeCollision;
+    //}
 
-    private void OnDisable()
-    {
-        Player.PlayerPassed -= UpdateCollision;
-        Player.PlayerWantedPass -= ChangeCollision;
-    }
+    //private void OnDisable()
+    //{
+    //    Player.PlayerPassed -= UpdateCollision;
+    //    Player.PlayerWantedPass -= ChangeCollision;
+    //}
 }

@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine.UI;
 using UnityEngine;
+using System;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    public static event Action OnGameOver;
+
     static public int score;
     static public string ammo;
+    static public bool gameOver;
 
     public Text scoreTxt;
     public Text[] ammoTxt;
+    public Text[] ammoTxt2;
 
     public float spawnTimeMin, spawnTimeMax;
     public float waitHorde;
@@ -30,7 +35,7 @@ public class GameManager : MonoBehaviour
     private int _spawnSelect;
     private float _spawnTime;
 
-    void Awake()
+    void Start()
     {
         if (Instance == null)
             Instance = this;
@@ -38,13 +43,15 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
 
         _spawns = GameObject.FindGameObjectsWithTag("spawn"); // encontra os spawn
-        _player = GameObject.FindGameObjectWithTag("Player"); // encontra o player
+        gameOver = false;
     }
 
     // Update is called once per frame
     void Update()
     {
         scoreTxt.text = score.ToString(); // converte em string e mostra na caixa de texto
+
+        CheckPlayer();
 
         if (_player != null)
         {
@@ -55,6 +62,9 @@ public class GameManager : MonoBehaviour
                 //Debug.Log("Corrotina iniciada");
                 StartCoroutine(Horde()); // chama a a horda
             }                
+        } else {
+            OnGameOver?.Invoke();
+            gameOver = true;
         }
     }
 
@@ -65,14 +75,22 @@ public class GameManager : MonoBehaviour
         ammoTxt[pId].text = ammo; // atualiza o texto da munição;
     }
 
+    public void UpdateAmmo2(int wId, string ammo)
+    {
+        Debug.Log(ammo);
+        ammoTxt2[wId].text = ammo;
+    }
+
     private void OnEnable()
     {
         Player.OnAmmoChanged += UpdateAmmo;
+        HeavyGun.OnAmmoChanged2 += UpdateAmmo2;
     }
 
     private void OnDisable()
     {
         Player.OnAmmoChanged -= UpdateAmmo;
+        HeavyGun.OnAmmoChanged2 -= UpdateAmmo2;
     }
 
     // ORGANIZAÇÃO DE HORDAS E SPAWN DE ZOMBIES;
@@ -82,6 +100,11 @@ public class GameManager : MonoBehaviour
         _zums = (_enemy != null);
 
         return _zums;
+    }
+
+    private void CheckPlayer()
+    {
+        _player = GameObject.FindGameObjectWithTag("Player");
     }
 
     IEnumerator Horde() // chama horda;
@@ -96,7 +119,6 @@ public class GameManager : MonoBehaviour
         else
         {
             zombies += zombies / 4;
-            //Debug.Log(zombies);
             HordeManager(zombies, _random);
         }
 
@@ -118,7 +140,7 @@ public class GameManager : MonoBehaviour
         }
         else 
         {
-            _spawnSelect = Random.Range(0, _spawns.Length);
+            _spawnSelect = UnityEngine.Random.Range(0, _spawns.Length);
             StartCoroutine(SpawnZums(howMuchZums, 3));
         }
     }
@@ -127,8 +149,8 @@ public class GameManager : MonoBehaviour
     {
         if (spawn == 3) {
             for (int i = 0; i < Zums; i++) {
-                _spawnTime = Random.Range(spawnTimeMin, spawnTimeMax);
-                _spawnSelect = Random.Range(0, _spawns.Length);
+                _spawnTime = UnityEngine.Random.Range(spawnTimeMin, spawnTimeMax);
+                _spawnSelect = UnityEngine.Random.Range(0, _spawns.Length);
                 SpawnEnemy(_spawnSelect);
                 yield return new WaitForSeconds(_spawnTime);
             }

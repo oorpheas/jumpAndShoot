@@ -13,9 +13,9 @@ public class Player : MonoBehaviour
 {
     // VARIAVEIS ESTÁTICAS
     public static event Action<int, string> OnAmmoChanged;
-    public static event Action<Collider2D, PolygonCollider2D, bool> PlayerPassed;
-    public static event Action<Collider2D, PolygonCollider2D> PlayerWantedPass;
-    public static event Action<int, Transform> PlayerInteracted;
+    //public static event Action<Collider2D, PolygonCollider2D, bool> PlayerPassed;
+    //public static event Action<Collider2D, PolygonCollider2D> PlayerWantedPass;
+    public static event Action<int, Transform, KeyCode, KeyCode> PlayerInteracted;
     public static bool isFlipped, playerStats;
     public static string ammo;
 
@@ -35,17 +35,19 @@ public class Player : MonoBehaviour
 
     [Header("Defina as Teclas")]
     [SerializeField] private KeyCode _jumpKey;
-    [SerializeField] private KeyCode _downKey;
     [SerializeField] private KeyCode _shootKey;
     [SerializeField] private KeyCode _reloadKey;
     [SerializeField] private KeyCode _interactKey;
-    [SerializeField] private KeyCode _attackKey;
+    
+    //[SerializeField] private KeyCode _attackKey;
 
     // CAMPOS PRIVADOS;
     private int _ammo, _id;
     private float _axisX, _timer;
     private string _animName, _input;
-    private bool _isGrounded, _inInteractionArea, _isWalking, _isReloading, _isFlipped, _isRight, _playerOne, _isAiming;
+    private bool _isGrounded, _inInteractionArea, _isWalking, 
+        _isReloading, _isFlipped, _isRight, 
+        _playerOne, _isAiming;
 
     private Rigidbody2D _rb2d;
     private Transform _gunL, _gunR, _armaUsada, _heavygun;
@@ -57,7 +59,7 @@ public class Player : MonoBehaviour
 
     static public KeyCode shootK, interactionK;
 
-    void Awake()
+    void Start()
     {
         _isAiming = false;
         _ammo = _ammoCapacity;
@@ -91,6 +93,8 @@ public class Player : MonoBehaviour
         if (!_isAiming) {
             SetAmmo();
             Shoot();
+        } else {
+            _animator.SetBool("isWalking", false);
         }
 
         Interacted();
@@ -121,7 +125,7 @@ public class Player : MonoBehaviour
 
     private void CallInteract()
     {
-        PlayerInteracted?.Invoke(_id, _heavygun);
+        PlayerInteracted?.Invoke(_id, _heavygun, _shootKey, _reloadKey);
     }
 
     // METODOS
@@ -207,9 +211,9 @@ public class Player : MonoBehaviour
 
     void Knife()
     {
-        if (!_anim.isPlaying && Input.GetKeyUp(_attackKey)) {
-            _anim.Play("attack");
-        }
+        //if (!_anim.isPlaying && Input.GetKeyUp(_attackKey)) {
+        //    _anim.Play("attack");
+        //}
     }
 
     // RECARGA
@@ -258,13 +262,12 @@ public class Player : MonoBehaviour
             _isGrounded = true;
         }
 
-        if (other.gameObject.CompareTag("sensor")){
-            if (Input.GetKey(_downKey)) {
-                _collider = other.gameObject.GetComponent<PolygonCollider2D>();
-                PlayerWantedPass?.Invoke(_self, _collider);
-
-            }
-        }
+        //if (other.gameObject.CompareTag("sensor")){
+        //    if (Input.GetAxis(_downKey) < 0) {
+        //        _collider = other.gameObject.GetComponent<PolygonCollider2D>();
+        //        PlayerWantedPass?.Invoke(_self, _collider);
+        //    } 
+        //}
     }
 
     private void OnCollisionExit2D(Collision2D other)
@@ -281,14 +284,14 @@ public class Player : MonoBehaviour
         } 
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("sensor")) {
-            _collider = other.gameObject.GetComponent<PolygonCollider2D>();
-            _isRight = (_axisX > 0);
-            PlayerPassed?.Invoke(_self, _collider, !_isRight);
-        }
-    }
+    //private void OnTriggerEnter2D(Collider2D other)
+    //{
+    //    if (other.gameObject.CompareTag("sensor")) {
+    //        _collider = other.gameObject.GetComponent<PolygonCollider2D>();
+    //        _isRight = (_axisX > 0);
+    //        PlayerPassed?.Invoke(_self, _collider, !_isRight);
+    //    }
+    //}
 
     private void OnTriggerStay2D(Collider2D other)
     {

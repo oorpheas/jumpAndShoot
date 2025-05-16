@@ -18,8 +18,7 @@ public class Enemy : MonoBehaviour
     private bool _isGrounded;
     private int _rS, _choosePlayer;
 
-    [SerializeField]
-    private Color[] shirts;
+    [SerializeField] private Color[] shirts;
 
     private Color _shirt;
 
@@ -43,20 +42,18 @@ public class Enemy : MonoBehaviour
         _rS = Random.Range(0, shirts.Length - 1);
 
         _shirt = new Color(shirts[_rS].r, shirts[_rS].g, shirts[_rS].b);
-        Debug.Log(_rS);
         _self.material.SetColor("_color_A", _shirt);
 
-        Debug.Log("o range é" + _attackRange);
-        Debug.Log("o cooldown é" + _cooldown);
+        //Debug.Log("o range é" + _attackRange);
+        //Debug.Log("o cooldown é" + _cooldown);
     }
 
     // Update is called once per frame
     void Update()
     {
         _timer += Time.deltaTime;
-        Debug.Log("está atacando?" + isAttacking);
 
-        if (_player[_choosePlayer] != null) {
+        if (!GameManager.gameOver && _player[_choosePlayer] != null) {
             MoveToPlayer();
             CorrectAxis();
 
@@ -66,10 +63,7 @@ public class Enemy : MonoBehaviour
 
         if (_cooldown < _timer) {
             AttackPlayer();
-        } else {
-            Debug.Log("está em cooldown");
-        }
-
+        } 
     }
 
     void FindPlayer()
@@ -103,9 +97,7 @@ public class Enemy : MonoBehaviour
         if (_distance >= _attackRange) {
             isAttacking = true;
             _timer = 0;
-            Debug.LogWarning("esta atacando");
-        } else
-            Debug.Log("atacando, porém fora do range");
+        }
     }
 
     private void OnCollisionStay2D(Collision2D other)
