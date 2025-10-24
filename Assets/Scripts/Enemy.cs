@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public float enemySpeedMin, enemySpeedMax, jumpForceMin, jumpForceMax, attackRangeMin, attackRangeMax, cooldownMin, cooldownMax;
+    public float enemySpeedMin, enemySpeedMax, jumpForceMin, 
+                jumpForceMax, attackRangeMin, attackRangeMax, 
+                cooldownMin, cooldownMax;
 
     static public bool isAttacking;
 
@@ -39,7 +41,7 @@ public class Enemy : MonoBehaviour
         _rS = Random.Range(0, shirts.Length - 1);
 
         _shirt = new Color(shirts[_rS].r, shirts[_rS].g, shirts[_rS].b);
-        _self.material.SetColor("_color_A", _shirt);
+        _self.material.SetColor("_color", _shirt);
 
         //Debug.Log("o range é" + _attackRange);
         //Debug.Log("o cooldown é" + _cooldown);
