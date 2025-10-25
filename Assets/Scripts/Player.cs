@@ -6,6 +6,9 @@ using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.DualShock;
+using UnityEngine.InputSystem.XInput;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
@@ -32,18 +35,29 @@ public class Player : MonoBehaviour
         [SerializeField] private GameObject bulletPrefab;
         [SerializeField] private int _speed, _ammoCapacity;
         [SerializeField] private float jumpForce;
+        [SerializeField] private GameObject _shootSound;
+        [SerializeField] private GameObject _rechargeSound;
+        [SerializeField] private GameObject _rechargeFullSound;
+
 
         [Header("Defina as Teclas")]
+        public Commands commands; // cria o seletor
+        public enum Commands // cria o dropdown
+        {
+                Keyboard,
+                Controller
+        }
+
         [SerializeField] private float _deadZone;
-        [SerializeField] private KeyCode _jumpKey;
-        [SerializeField] private KeyCode _shootKey;
-        [SerializeField] private KeyCode _reloadKey;
-        [SerializeField] private KeyCode _interactKey;
+        private KeyCode _jumpKey;
+        private KeyCode _shootKey;
+        private KeyCode _reloadKey;
+        private KeyCode _interactKey;
 
         //[SerializeField] private KeyCode _attackKey;
 
         // CAMPOS PRIVADOS;
-        private int _ammo, _id;
+        private int _ammo, _id, _gamepad;
         private float _axisX;
         private string _animName, _input;
         private bool _isGrounded, _inInteractionArea, _isWalking,
@@ -64,11 +78,9 @@ public class Player : MonoBehaviour
                 _playerOne = (this.jogador == 0);
                 if (_playerOne) {
                         Spawn("playerSpawn");
-                        _input = "Horizontal-P1";
                         _id = 0;
                 } else {
                         Spawn("playerSpawn2");
-                        _input = "Horizontal-P2";
                         _id = 1;
                 }
 
@@ -80,8 +92,78 @@ public class Player : MonoBehaviour
 
                 _armaUsada = _gunR;
 
+                DefineCommands();
+
                 shootK = _shootKey;
                 interactionK = _interactKey;
+        }
+
+        private void OnEnable() {
+                ControllerDetector.OnInputChange += SetController;
+        }
+
+        private void OnDisable() {
+                ControllerDetector.OnInputChange -= SetController;
+        }
+
+        void SetController(int id, bool controller) {
+                if (id == _id + 1 ) {
+                        if (controller) {
+                                this.commands = (Commands)1;
+                        } else {
+                                this.commands = (Commands)0;
+                        }
+                }
+        
+                DefineCommands();
+        }
+
+        void DefineCommands() {
+                if (_id == 0) {
+                        if (this.commands == 0) {
+                                _jumpKey = KeyCode.W;
+                                _shootKey = KeyCode.LeftShift;
+                                _reloadKey = KeyCode.LeftControl;
+                                _interactKey = KeyCode.E;
+                                _input = "Horizontal-P1B";
+                        } else {
+                                if (Gamepad.current is DualSenseGamepadHID) {
+                                        _jumpKey = KeyCode.Joystick1Button1;
+                                        _shootKey = KeyCode.Joystick1Button0;
+                                        _reloadKey = KeyCode.Joystick1Button2;
+                                        _interactKey = KeyCode.Joystick1Button3;
+                                } else {
+                                        _jumpKey = KeyCode.Joystick1Button0;
+                                        _shootKey = KeyCode.Joystick1Button2;
+                                        _reloadKey = KeyCode.Joystick1Button1;
+                                        _interactKey = KeyCode.Joystick1Button3;
+                                }                            
+                                _input = "Horizontal-P1";
+                        }
+                } else {
+                        if (this.commands == 0) {
+                                _jumpKey = KeyCode.UpArrow;
+                                _shootKey = KeyCode.RightShift;
+                                _reloadKey = KeyCode.RightControl;
+                                _interactKey = KeyCode.PageDown;
+                                _input = "Horizontal-P2B";
+                        } else {
+                                if (Gamepad.current is DualSenseGamepadHID) {
+                                        _jumpKey = KeyCode.Joystick2Button1;
+                                        _shootKey = KeyCode.Joystick2Button0;
+                                        _reloadKey = KeyCode.Joystick2Button2;
+                                        _interactKey = KeyCode.Joystick2Button3;
+                                } else {
+                                        _jumpKey = KeyCode.Joystick2Button0;
+                                        _shootKey = KeyCode.Joystick2Button2;
+                                        _reloadKey = KeyCode.Joystick2Button1;
+                                        _interactKey = KeyCode.Joystick2Button3;
+                                }
+                                _input = "Horizontal-P2";
+                        }
+                }
+
+                Debug.Log("controles definidos!");
         }
 
         void Update() {
@@ -124,7 +206,9 @@ public class Player : MonoBehaviour
         void Moviment(float axis) {
                 _rb2d.velocity = new Vector2(axis * _speed, _rb2d.velocity.y); // em Y ele está recebendo a velocidade atribuida (ou seja, gravidade);_isWalking = (_rb2d.velocity.x != 0f); 
                 _isWalking = (_rb2d.velocity.x != 0);
-                SetFlip(axis);
+                if (_isWalking) {
+                        SetFlip(axis);
+                }
                 _armaUsada = _isFlipped ? _gunL.transform : _gunR.transform;
         }
 
@@ -147,6 +231,8 @@ public class Player : MonoBehaviour
 
         void Shoot() {
                 if ((_ammo > 0) && Input.GetKeyDown(_shootKey) && !_isReloading) {
+                        var _som = Instantiate(_shootSound, gameObject.transform.position, Quaternion.identity);
+                        Destroy(_som, 2f);
                         SetShoot(_armaUsada, _isFlipped);
                         --_ammo;
                         CallAmmoChange();
@@ -161,7 +247,7 @@ public class Player : MonoBehaviour
         }
 
         void SetFlip(float a) {
-                _isFlipped = (a < 0);
+                _isFlipped = a < 0;
                 _animator.SetBool("isFlipped", _isFlipped);
         }
 
@@ -212,9 +298,13 @@ public class Player : MonoBehaviour
                         int lastNum = _ammo;
                         yield return new WaitForSeconds(0.5f);
                         CallAmmoChange();
-                        Debug.Log(_ammo);
+                        var _som = Instantiate(_rechargeSound, gameObject.transform.position, Quaternion.identity);
+                        Destroy(_som, 1f);
+                        //Debug.Log(_ammo);
                 }
 
+                var _som2 = Instantiate(_rechargeFullSound, gameObject.transform.position, Quaternion.identity);
+                Destroy(_som2, 1f);
                 //yield return new WaitForSeconds(2f);
                 //_ammo = _ammoCapacity;
                 //CallAmmoChange();

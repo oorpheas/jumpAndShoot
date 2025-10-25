@@ -37,11 +37,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Blur_Offset: 0.00037
-    - _Frequency: 128
+    - _Blur_Offset: 0.00032
+    - _Frequency: 700
     - _Scan_Lines_Speed: 0.02
     m_Colors:
     - _Color: {r: 2.0152128, g: 2.0152128, b: 2.0152128, a: 1}
-    - _Line_A: {r: 1, g: 0.6010854, b: 0.4292453, a: 1}
-    - _Line_B: {r: 0.5784977, g: 0.81015027, b: 0.9811321, a: 1}
+    - _Line_A: {r: 1, g: 0.53494525, b: 0, a: 1}
+    - _Line_B: {r: 0, g: 0.9301295, b: 1, a: 1}
   m_BuildTextureStacks: []

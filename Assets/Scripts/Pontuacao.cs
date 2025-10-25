@@ -14,6 +14,6 @@ public class Pontuacao : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _self.text = "pontuação" + GameManager.score;
+        _self.text = "pontuação " + GameManager.score;
     }
 }
