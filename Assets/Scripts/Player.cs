@@ -127,17 +127,10 @@ public class Player : MonoBehaviour
                                 _interactKey = KeyCode.E;
                                 _input = "Horizontal-P1B";
                         } else {
-                                if (Gamepad.current is DualSenseGamepadHID) {
-                                        _jumpKey = KeyCode.Joystick1Button1;
-                                        _shootKey = KeyCode.Joystick1Button0;
-                                        _reloadKey = KeyCode.Joystick1Button2;
-                                        _interactKey = KeyCode.Joystick1Button3;
-                                } else {
-                                        _jumpKey = KeyCode.Joystick1Button0;
-                                        _shootKey = KeyCode.Joystick1Button2;
-                                        _reloadKey = KeyCode.Joystick1Button1;
-                                        _interactKey = KeyCode.Joystick1Button3;
-                                }                            
+                                _jumpKey = KeyCode.Joystick1Button0;
+                                _shootKey = KeyCode.Joystick1Button2;
+                                _reloadKey = KeyCode.Joystick1Button1;
+                                _interactKey = KeyCode.Joystick1Button3;
                                 _input = "Horizontal-P1";
                         }
                 } else {
@@ -148,17 +141,10 @@ public class Player : MonoBehaviour
                                 _interactKey = KeyCode.PageDown;
                                 _input = "Horizontal-P2B";
                         } else {
-                                if (Gamepad.current is DualSenseGamepadHID) {
-                                        _jumpKey = KeyCode.Joystick2Button1;
-                                        _shootKey = KeyCode.Joystick2Button0;
-                                        _reloadKey = KeyCode.Joystick2Button2;
-                                        _interactKey = KeyCode.Joystick2Button3;
-                                } else {
-                                        _jumpKey = KeyCode.Joystick2Button0;
-                                        _shootKey = KeyCode.Joystick2Button2;
-                                        _reloadKey = KeyCode.Joystick2Button1;
-                                        _interactKey = KeyCode.Joystick2Button3;
-                                }
+                                _jumpKey = KeyCode.Joystick2Button0;
+                                _shootKey = KeyCode.Joystick2Button2;
+                                _reloadKey = KeyCode.Joystick2Button1;
+                                _interactKey = KeyCode.Joystick2Button3;
                                 _input = "Horizontal-P2";
                         }
                 }

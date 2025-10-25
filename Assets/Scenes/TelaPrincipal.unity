@@ -3979,7 +3979,7 @@ MonoBehaviour:
   _shootSound: {fileID: 6974769667982053311, guid: a62db4299366f8946bf76d36665d5677, type: 3}
   _rechargeSound: {fileID: 8531780337135742908, guid: a9a01036a427c814d9ff4153393fdbbf, type: 3}
   _rechargeFullSound: {fileID: 2651445401786206992, guid: 3f1491b2fa4de6e4b9a68bdc71e1c503, type: 3}
-  commands: 1
+  commands: 0
   _deadZone: 0.33
 --- !u!50 &1677003313
 Rigidbody2D:
@@ -5012,7 +5012,7 @@ MonoBehaviour:
   _shootSound: {fileID: 6974769667982053311, guid: a62db4299366f8946bf76d36665d5677, type: 3}
   _rechargeSound: {fileID: 8531780337135742908, guid: a9a01036a427c814d9ff4153393fdbbf, type: 3}
   _rechargeFullSound: {fileID: 2651445401786206992, guid: 3f1491b2fa4de6e4b9a68bdc71e1c503, type: 3}
-  commands: 1
+  commands: 0
   _deadZone: 0.33
 --- !u!60 &2059931716
 PolygonCollider2D:
