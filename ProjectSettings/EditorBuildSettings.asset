@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/TelaInicial.unity
+    guid: 312d9e6e2682bef4888366bf88ee792d
+  - enabled: 1
     path: Assets/Scenes/TelaPrincipal.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/TelaPrincipalSinglePlayer.unity
+    guid: fbad06a440117354dbd29c97e1c6560d
   m_configObjects: {}
